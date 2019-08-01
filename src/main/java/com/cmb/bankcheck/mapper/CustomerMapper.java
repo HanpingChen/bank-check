@@ -1,9 +1,7 @@
 package com.cmb.bankcheck.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import com.cmb.bankcheck.entity.ProcessEntity;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -14,10 +12,12 @@ import java.util.List;
  * Time:13:31
  */
 @Mapper
-public interface UserMapper {
+public interface CustomerMapper {
 
     String sql = "insert into user(age, name) values(#{age}, #{name})";
     @Insert(sql)
     int insertUser(@Param("name") String name, @Param("age") int age);
 
+    @Select("select * from process where user_id = #{id}")
+    List<ProcessEntity> queryCustomerProcesses(@Param("id") String id);
 }

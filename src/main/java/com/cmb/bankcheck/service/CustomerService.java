@@ -12,11 +12,11 @@ import org.activiti.engine.runtime.ProcessInstance;
  * Date:2019-07-26
  * Time:10:42
  */
-public interface CustomService {
+public interface CustomerService {
 
     Message startProcess(ApplyEntity apply);
 
     Message queryProcess();
 
-    Message queryProcessStatus(String uerId);
+    Message queryProcessStatus(String userId);
 }

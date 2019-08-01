@@ -4,15 +4,22 @@ import com.cmb.bankcheck.config.AppConfig;
 import com.cmb.bankcheck.entity.ApplyEntity;
 import com.cmb.bankcheck.entity.ProcessDefinitionEntity;
 import com.cmb.bankcheck.entity.ProcessEntity;
+import com.cmb.bankcheck.entity.TaskEntity;
+import com.cmb.bankcheck.mapper.CustomerMapper;
 import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.message.ResponseMessage;
-import com.cmb.bankcheck.service.CustomService;
+import com.cmb.bankcheck.service.CustomerService;
+import com.cmb.bankcheck.util.MessageUtil;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +33,7 @@ import java.util.List;
  * Time:10:43
  */
 @Service
-public class CustomServiceImpl implements CustomService {
+public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private RuntimeService runtimeService;
@@ -35,10 +42,16 @@ public class CustomServiceImpl implements CustomService {
     private RepositoryService repositoryService;
 
     @Autowired
+    private TaskService taskService;
+
+    @Autowired
     AppConfig config;
 
     @Autowired
     ProcessMapper processMapper;
+
+    @Autowired
+    CustomerMapper customerMapper;
 
     @Override
     public Message startProcess(ApplyEntity apply) {
@@ -57,7 +70,7 @@ public class CustomServiceImpl implements CustomService {
         // 返回数据
         List<ProcessEntity> data = new ArrayList<>();
         ProcessEntity entity = new ProcessEntity();
-        entity.setId(processInstance.getId());
+        entity.setProcessId(processInstance.getId());
         entity.setName(processInstance.getName());
         entity.setUserId(userId);
         entity.setCreateTime(processInstance.getStartTime());
@@ -92,7 +105,32 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public Message queryProcessStatus(String uerId) {
-        return null;
+    public Message queryProcessStatus(String userId) {
+        // 首先查询process表中的process id
+        List<ProcessEntity> processEntities = customerMapper.queryCustomerProcesses(userId);
+        List<ProcessEntity> data = new ArrayList<>();
+        try {
+            for (ProcessEntity process:processEntities){
+                String processId = process.getProcessId();
+                // 查询任务
+                TaskQuery taskQuery = taskService.createTaskQuery();
+                taskQuery.processInstanceId(processId);
+                List<Task> taskList = taskQuery.list();
+                Task task = taskList.get(0);
+                TaskEntity taskEntity = new TaskEntity();
+                taskEntity.setAssignee(task.getAssignee());
+                taskEntity.setTaskName(task.getName());
+                taskEntity.setTaskId(task.getId());
+                process.setTask(taskEntity);
+                data.add(process);
+            }
+
+            return new MessageUtil<ProcessEntity>().setMsg(data, config.getSuccessCode(),config.getSuccessMsg());
+        }catch (Exception e){
+            Message msg = new Message();
+            msg.setStatus(config.getErrorCode());
+            msg.setMsg(e.getMessage());
+            return msg;
+        }
     }
 }

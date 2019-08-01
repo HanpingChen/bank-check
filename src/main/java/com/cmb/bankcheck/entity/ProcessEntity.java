@@ -1,5 +1,7 @@
 package com.cmb.bankcheck.entity;
 
+import org.activiti.engine.task.Task;
+
 import java.util.Date;
 
 /**
@@ -10,13 +12,30 @@ import java.util.Date;
  */
 public class ProcessEntity {
 
-    private String id;
+    private String processId;
 
     private String name;
 
     private String userId;
 
     private Date createTime;
+
+    // 当前任务
+    private TaskEntity task;
+
+    // 当前流程状态
+    private int status;
+
+    // 当前流程备注
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Date getCreateTime() {
         return createTime;
@@ -34,12 +53,28 @@ public class ProcessEntity {
         this.userId = userId;
     }
 
-    public String getId() {
-        return id;
+    public String getProcessId() {
+        return processId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public TaskEntity getTask() {
+        return task;
+    }
+
+    public void setTask(TaskEntity task) {
+        this.task = task;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getName() {

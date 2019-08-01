@@ -2,7 +2,7 @@ package com.cmb.bankcheck.controller;
 
 import com.cmb.bankcheck.entity.ApplyEntity;
 import com.cmb.bankcheck.message.Message;
-import com.cmb.bankcheck.service.CustomService;
+import com.cmb.bankcheck.service.CustomerService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +15,23 @@ import org.springframework.web.bind.annotation.*;
  * 处理客户请求，包括开启流程、查询流程等，查看进度
  */
 @RestController
-public class CustomController {
+public class CustomerController {
 
     @Autowired
-    private CustomService service;
+    private CustomerService service;
 
-    @RequestMapping(value = "/custom/start_process_by_key", method = RequestMethod.POST)
+    @RequestMapping(value = "/customer/start_process_by_key", method = RequestMethod.POST)
     public Message startProcessByKey(@RequestBody ApplyEntity apply){
         return service.startProcess(apply);
     }
 
-    @RequestMapping(value = "/custom/query_process",method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/query_process",method = RequestMethod.GET)
     public Message queryProcess(){
         return service.queryProcess();
     }
 
-    @RequestMapping(value = "/custom/process_status",method = RequestMethod.POST)
-    public Message queryProcessStatus(@Param("clientId") String clientId){
-        return null;
+    @RequestMapping(value = "/customer/process_status",method = RequestMethod.POST)
+    public Message queryProcessStatus(@Param("customerId") String customerId){
+        return service.queryProcessStatus(customerId);
     }
 }
