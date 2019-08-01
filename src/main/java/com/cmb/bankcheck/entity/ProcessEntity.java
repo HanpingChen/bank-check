@@ -1,5 +1,7 @@
 package com.cmb.bankcheck.entity;
 
+import java.util.Date;
+
 /**
  * created by chenhanping
  * Designer:chenhanping
@@ -13,6 +15,16 @@ public class ProcessEntity {
     private String name;
 
     private String userId;
+
+    private Date createTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
     public String getUserId() {
         return userId;
