@@ -3,16 +3,15 @@ package com.cmb.bankcheck.entity;
 /**
  * created by chenhanping
  * Designer:chenhanping
- * Date:2019-07-26
- * Time:11:20
+ * Date:2019-07-31
+ * Time:11:01
+ * 客户实体类
  */
-public class ProcessEntity {
-
-    private String id;
-
-    private String name;
+public class UserEntity {
 
     private String userId;
+
+    private String name;
 
     public String getUserId() {
         return userId;
@@ -20,14 +19,6 @@ public class ProcessEntity {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
