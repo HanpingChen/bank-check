@@ -60,6 +60,7 @@ public class CustomServiceImpl implements CustomService {
         entity.setId(processInstance.getId());
         entity.setName(processInstance.getName());
         entity.setUserId(userId);
+        entity.setCreateTime(processInstance.getStartTime());
         data.add(entity);
         msg.setData(data);
         msg.setSize(data.size());
@@ -88,5 +89,10 @@ public class CustomServiceImpl implements CustomService {
         msg.setData(data);
         msg.setSize(data.size());
         return msg;
+    }
+
+    @Override
+    public Message queryProcessStatus(String uerId) {
+        return null;
     }
 }

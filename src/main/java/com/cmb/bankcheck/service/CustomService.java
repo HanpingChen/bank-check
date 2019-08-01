@@ -17,4 +17,6 @@ public interface CustomService {
     Message startProcess(ApplyEntity apply);
 
     Message queryProcess();
+
+    Message queryProcessStatus(String uerId);
 }
