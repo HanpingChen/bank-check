@@ -3,6 +3,7 @@ package com.cmb.bankcheck.controller;
 import com.cmb.bankcheck.entity.ApplyEntity;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.service.CustomService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,5 +28,10 @@ public class CustomController {
     @RequestMapping(value = "/custom/query_process",method = RequestMethod.GET)
     public Message queryProcess(){
         return service.queryProcess();
+    }
+
+    @RequestMapping(value = "/custom/process_status",method = RequestMethod.POST)
+    public Message queryProcessStatus(@Param("clientId") String clientId){
+        return null;
     }
 }
