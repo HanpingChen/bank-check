@@ -17,6 +17,84 @@ public class ApplyEntity {
 
     private String key;
 
+    // 给当前申请分配的id
+    private String applyId;
+
+    // 减免类型
+    private String xmtype;
+
+    // 减免金额
+    private float amt;
+
+    // 本年度的减免记录
+    private String record;
+
+    // 合作前景
+    private String cor;
+
+    // 效益评估与分析
+    private String analyse;
+
+    // 客户规模，效益有无不良贷款
+    private String situation;
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public String getXmtype() {
+        return xmtype;
+    }
+
+    public void setXmtype(String xmtype) {
+        this.xmtype = xmtype;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
+    }
+
+
+    public float getAmt() {
+        return amt;
+    }
+
+    public void setAmt(float amt) {
+        this.amt = amt;
+    }
+
+    public String getRecord() {
+        return record;
+    }
+
+    public void setRecord(String record) {
+        this.record = record;
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
+
+    public String getAnalyse() {
+        return analyse;
+    }
+
+    public void setAnalyse(String analyse) {
+        this.analyse = analyse;
+    }
+
+    public String getSituation() {
+        return situation;
+    }
+
+    public void setSituation(String situation) {
+        this.situation = situation;
+    }
+
     public String getUserId() {
         return userId;
     }
