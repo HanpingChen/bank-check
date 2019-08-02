@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,8 +33,12 @@ public interface ProcessMapper {
      * @param processId
      * @return
      */
-    @Insert("insert into process(user_id, process_id,remark) values (#{userId}, #{processId},#{remark})")
-    int insertProcess(@Param("userId") String userId, @Param("processId") String processId,@Param("status") int status,@Param("remark") String remark);
+    @Insert("insert into process" +
+            "(user_id, process_id,remark, create_time, status, parent_id, system_id, work_id) values " +
+            "(#{userId}, #{processId},#{remark},#{createTime},#{status},#{parentId},#{systemId},#{workId})")
+    int insertProcess(@Param("userId") String userId, @Param("processId") String processId, @Param("status") int status, @Param("remark") String remark,
+                      @Param("createTime") Date createTime, @Param("systemId") String systemId,@Param("workId") String workId, @Param("parentId") String parentId
+                      );
 
     /**
      * 根据instanceId，查询得到userId等相关信息
