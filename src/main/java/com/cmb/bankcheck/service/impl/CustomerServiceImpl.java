@@ -66,8 +66,8 @@ public class CustomerServiceImpl implements CustomerService {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
         ResponseMessage<ProcessEntity> msg = new ResponseMessage<>();
         // 将流程id和userid写入process表中
-        processMapper.insertProcess(userId, processInstance.getId());
-        // 返回数据
+        processMapper.insertProcess(userId, processInstance.getId(),1,"");
+        /* 返回数据 */
         List<ProcessEntity> data = new ArrayList<>();
         ProcessEntity entity = new ProcessEntity();
         entity.setProcessId(processInstance.getId());
