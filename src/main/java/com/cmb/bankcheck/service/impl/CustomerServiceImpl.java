@@ -10,10 +10,12 @@ import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.message.ResponseMessage;
 import com.cmb.bankcheck.service.CustomerService;
+import com.cmb.bankcheck.util.BeanUtil;
 import com.cmb.bankcheck.util.MessageUtil;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -23,7 +25,10 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -57,29 +62,39 @@ public class CustomerServiceImpl implements CustomerService {
     public Message startProcess(ApplyEntity apply) {
         String key = apply.getKey();
         String userId = apply.getUserId();
-        if (key == null || userId == null){
+        String Xmtype = apply.getXmtype();
+        float amt = apply.getAmt();
+        System.out.println(key + ""+ Xmtype);
+        if (key == null || userId == null || Xmtype == null || amt == 0){
             Message msg = new Message();
             msg.setStatus(config.getErrorCode());
             msg.setMsg("字段不全");
             return msg;
         }
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
-        ResponseMessage<ProcessEntity> msg = new ResponseMessage<>();
         // 将流程id和userid写入process表中
-        processMapper.insertProcess(userId, processInstance.getId(),1,"");
-        /* 返回数据 */
-        List<ProcessEntity> data = new ArrayList<>();
-        ProcessEntity entity = new ProcessEntity();
-        entity.setProcessId(processInstance.getId());
-        entity.setName(processInstance.getName());
-        entity.setUserId(userId);
-        entity.setCreateTime(processInstance.getStartTime());
-        data.add(entity);
-        msg.setData(data);
-        msg.setSize(data.size());
-        msg.setStatus(config.getSuccessCode());
-        msg.setMsg(config.getSuccessMsg());
-        return msg;
+        processMapper.insertProcess(userId, processInstance.getId(),1,"", processInstance.getStartTime(), null,null,processInstance.getParentId());
+        // 设置流程变量,将apply entity的值全部值
+        // 先将entity转化为map
+        try {
+            HashMap<String, Object> map = BeanUtil.convertBean(apply);
+            runtimeService.setVariables(processInstance.getId(), map);
+            /* 返回数据 */
+            List<ProcessEntity> data = new ArrayList<>();
+            ProcessEntity entity = new ProcessEntity();
+            entity.setProcessId(processInstance.getId());
+            entity.setName(processInstance.getName());
+            entity.setUserId(userId);
+            entity.setCreateTime(processInstance.getStartTime());
+            data.add(entity);
+            return new MessageUtil<ProcessEntity>().setMsg(data, config.getSuccessCode(),config.getSuccessMsg());
+        } catch (Exception e) {
+            Message msg = new Message();
+            msg.setStatus(config.getErrorCode());
+            msg.setMsg(e.getMessage());
+            return msg;
+        }
+
     }
 
     @Override
@@ -132,5 +147,6 @@ public class CustomerServiceImpl implements CustomerService {
             msg.setMsg(e.getMessage());
             return msg;
         }
+
     }
 }
