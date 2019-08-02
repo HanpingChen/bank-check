@@ -36,6 +36,10 @@ public class ProcessEntity {
         this.workId = workId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
     public String getParentId() {
         return parentId;
     }
@@ -83,10 +87,6 @@ public class ProcessEntity {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public String getUserId(String insId) {
-        return userId;
     }
 
     public void setUserId(String userId) {
