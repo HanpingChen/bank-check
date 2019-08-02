@@ -20,6 +20,38 @@ public class ProcessEntity {
 
     private Date createTime;
 
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
+    }
+
+    public String getWorkId() {
+        return workId;
+    }
+
+    public void setWorkId(String workId) {
+        this.workId = workId;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public Date getCompleteTime() {
+        return completeTime;
+    }
+
+    public void setCompleteTime(Date completeTime) {
+        this.completeTime = completeTime;
+    }
+
     // 当前任务
     private TaskEntity task;
 
@@ -28,6 +60,14 @@ public class ProcessEntity {
 
     // 当前流程备注
     private String remark;
+
+    private String systemId;
+
+    private String workId;
+
+    private String parentId;
+
+    private Date completeTime;
 
     public String getRemark() {
         return remark;
@@ -45,7 +85,7 @@ public class ProcessEntity {
         this.createTime = createTime;
     }
 
-    public String getUserId() {
+    public String getUserId(String insId) {
         return userId;
     }
 
