@@ -86,7 +86,7 @@ public class ApprovalServiceImpl implements ApprovalService {
            *2.并更新历史数据*/
 
         Message msg=new Message();
-        ResponseMessage remsg=new ResponseMessage();
+        ResponseMessage<ProcessEntity> remsg = new ResponseMessage<>();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processId=task.getProcessInstanceId();
         if (judgement=="NO"){
@@ -106,14 +106,15 @@ public class ApprovalServiceImpl implements ApprovalService {
         //审核通过的情况下，任务执行，并且指定下一个任务的办理人
         taskService.complete(taskId);
         Task nextTask = taskService.createTaskQuery().processInstanceId(processId).singleResult();
-        nextTask.setAssignee(assignee);
+        taskService.setAssignee(nextTask.getId(), assignee);
+        //nextTask.setAssignee(assignee);
         List<ProcessEntity> data =new ArrayList<>() ;
         ProcessEntity entity =new ProcessEntity();
         entity.setRemark(remark);
         entity.setStatus(config.getSuccessCode());
         entity.setProcessId(processId);
-        String proName = runtimeService.createProcessInstanceQuery().processDefinitionId(processId).singleResult().getName();
-        entity.setName(proName);
+        //String proName = runtimeService.createProcessInstanceQuery().processDefinitionId(processId).singleResult().getName();
+        // entity.setName(proName);
         data.add(entity);
         remsg.setData(data);
         remsg.setMsg("审批通过");
