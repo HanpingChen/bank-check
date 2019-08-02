@@ -106,6 +106,14 @@ public class ApprovalServiceImpl implements ApprovalService {
         //审核通过的情况下，任务执行，并且指定下一个任务的办理人
         taskService.complete(taskId);
         Task nextTask = taskService.createTaskQuery().processInstanceId(processId).singleResult();
+        if (nextTask == null){
+            // 需要更新process表，流程状态，结束时间
+            // 更新完成返回process表的内容
+            Message finish = new Message();
+            finish.setMsg("审批结束");
+            finish.setStatus(0);
+            return finish;
+        }
         taskService.setAssignee(nextTask.getId(), assignee);
         //nextTask.setAssignee(assignee);
         List<ProcessEntity> data =new ArrayList<>() ;
