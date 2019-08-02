@@ -1,6 +1,7 @@
 package com.cmb.bankcheck.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
  * Date:2019-07-26
  * Time:09:40
  */
+
 @Component
 @ConfigurationProperties(prefix = "app")
 public class AppConfig {
