@@ -68,6 +68,8 @@ public class ApprovalServiceImpl implements ApprovalService {
             entity.setTaskId(task.getId());
             entity.setUpdateTime(task.getCreateTime());
             entity.setTaskName(task.getName());
+            entity.setProcessInstanceId(task.getProcessInstanceId());
+
             data.add(entity);
         }
         resMsg.setData(data);
