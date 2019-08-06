@@ -1,10 +1,7 @@
 package com.cmb.bankcheck.mapper;
 
 import com.cmb.bankcheck.entity.ProcessEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
 import java.util.List;
@@ -45,7 +42,15 @@ public interface ProcessMapper {
      * @param processId
      * @return
      */
-    @Select("select * from process where processId=#{processId}")
-    public List<ProcessEntity> querytProcessByinsId(@Param("processId") String processId);
+    @Select("select * from process where process_id=#{processId}")
+    public List<ProcessEntity> querytProcessByProcessId(@Param("processId") String processId);
+
+    /**更新process表中用户的任务状态
+     * 1,审批不通过时，需更新process表为不同过的状态
+     * 2，审批结束时，需要更新用户的 状态为任务完成状态
+     */
+    @Update("update process set remark=#{remark},complete_time=#{completeTime}, status=#{status} where process_id=#{processId}")
+    public  void updateProcessByProcessId(@Param("processId") String processId,@Param("remark") String remark,@Param("completeTime") Date completeTime,
+                               @Param("status") int status);
 
 }
