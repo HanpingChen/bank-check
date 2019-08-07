@@ -76,8 +76,6 @@ public class CustomerServiceImpl implements CustomerService {
             msg.setMsg("字段不全");
             return msg;
         }
-        // 启动流程时需要传递管理委员会的名单
-
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
         // 将流程id和userid写入process表中
         processMapper.insertProcess(userId, processInstance.getId(),1,"", processInstance.getStartTime(), null,null,processInstance.getParentId());
