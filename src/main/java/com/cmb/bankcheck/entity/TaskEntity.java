@@ -15,6 +15,39 @@ public class TaskEntity {
 
     private Date updateTime;
 
+    // 所属的流程实例的id
+    private String processInstanceId;
+
+    // 流程的key
+    private String processKey;
+
+    // 候选人
+    private String candidates;
+
+    public String getCandidates() {
+        return candidates;
+    }
+
+    public void setCandidates(String candidates) {
+        this.candidates = candidates;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getProcessKey() {
+        return processKey;
+    }
+
+    public void setProcessKey(String processKey) {
+        this.processKey = processKey;
+    }
+
     public String getTaskId() {
         return taskId;
     }

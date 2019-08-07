@@ -18,6 +18,50 @@ public class EmployeeEntity {
     // 部门名称
     private String apart;
 
+    // 职位
+    private String position;
+
+    // 机构城市
+    private String city;
+
+    // 机构代码
+    private String code;
+
+    // 处理业务类型，只有业务管理部门的员工有，其他员工均为null
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
     public String getId() {
         return id;
     }

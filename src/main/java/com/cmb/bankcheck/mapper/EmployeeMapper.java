@@ -4,6 +4,7 @@ import com.cmb.bankcheck.entity.EmployeeEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -21,9 +22,19 @@ public interface EmployeeMapper {
      * @param apart
      * @return
      */
-    public List<EmployeeEntity> queryEmployeeByApart(String apart);
+    @Select("select * from employee where apart = #{apart}")
+    public List<EmployeeEntity> queryEmployeeByApart(@Param("apart") String apart);
 
 
     @Select("select password from employee where id = #{id}")
     public String queryPassword(@Param("id") String id);
+
+    @Select("select * from employee")
+    public List<EmployeeEntity> queryAll();
+
+    @Select("select distinct apart from employee")
+    public List<String> queryAllApart();
+
+    @Select("select distinct position from employee")
+    public List<String> queryAllPosition();
 }

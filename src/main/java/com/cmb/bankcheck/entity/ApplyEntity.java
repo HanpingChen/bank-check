@@ -17,6 +17,8 @@ public class ApplyEntity {
 
     private String key;
 
+    // 发起人（员工）
+    private String starter;
     // 给当前申请分配的id
     private String applyId;
 
@@ -40,6 +42,14 @@ public class ApplyEntity {
 
     public String getApplyId() {
         return applyId;
+    }
+
+    public String getStarter() {
+        return starter;
+    }
+
+    public void setStarter(String starter) {
+        this.starter = starter;
     }
 
     public String getXmtype() {
