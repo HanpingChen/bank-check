@@ -2,6 +2,8 @@ package com.cmb.bankcheck.mapper;
 
 import com.cmb.bankcheck.entity.EmployeeEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -20,4 +22,8 @@ public interface EmployeeMapper {
      * @return
      */
     public List<EmployeeEntity> queryEmployeeByApart(String apart);
+
+
+    @Select("select password from employee where id = #{id}")
+    public String queryPassword(@Param("id") String id);
 }
