@@ -6,6 +6,7 @@ import com.cmb.bankcheck.entity.ProcessDefinitionEntity;
 import com.cmb.bankcheck.entity.ProcessEntity;
 import com.cmb.bankcheck.entity.TaskEntity;
 import com.cmb.bankcheck.mapper.CustomerMapper;
+import com.cmb.bankcheck.mapper.EmployeeMapper;
 import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.message.ResponseMessage;
@@ -30,6 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * created by chenhanping
@@ -58,6 +60,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     CustomerMapper customerMapper;
 
+    @Autowired
+    EmployeeMapper employeeMapper;
+
     @Override
     public Message startProcess(ApplyEntity apply) {
         String key = apply.getKey();
@@ -74,10 +79,17 @@ public class CustomerServiceImpl implements CustomerService {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
         // 将流程id和userid写入process表中
         processMapper.insertProcess(userId, processInstance.getId(),1,"", processInstance.getStartTime(), null,null,processInstance.getParentId());
+        String taskId = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult().getId();
+        taskService.setAssignee(taskId, apply.getStarter());
         // 设置流程变量,将apply entity的值全部值
         // 先将entity转化为map
         try {
             HashMap<String, Object> map = BeanUtil.convertBean(apply);
+            // 还需要将委员会名单设置
+            // 从数据库中查询管理委员会
+            List<String> assignees = employeeMapper.queryEmployeeByApart("业务管理委员会");
+            map.put("assignees",assignees);
+            map.put("count",0);
             runtimeService.setVariables(processInstance.getId(), map);
             /* 返回数据 */
             List<ProcessEntity> data = new ArrayList<>();
