@@ -20,6 +20,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.lang.model.element.NestingKind;
 import javax.swing.text.StyledEditorKit;
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,6 +101,45 @@ public class ApprovalServiceImpl implements ApprovalService {
         ResponseMessage<ProcessEntity> remsg = new ResponseMessage<>();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processId=task.getProcessInstanceId();
+        String label =taskService.createTaskQuery().taskId(taskId).singleResult().getDescription();
+
+        if(label=="会签"){
+            taskService.complete(taskId);
+            String nextTaskId = taskService.createTaskQuery().processInstanceId(processId).singleResult().getId();
+            int nOfComp=(Integer) taskService.getVariables(nextTaskId).get("nrOfCompletedInstances");
+            //达到审批委员会的总审批人数，即委员会有人都审批完毕
+            if (nOfComp==10){
+                int count=(Integer) taskService.getVariables(nextTaskId).get("count");
+                if(count<6){
+                    //委员会通票数不够，删除任务。
+                    taskService.deleteTask(nextTaskId);
+                    processMapper.updateProcessByProcessId(processId,remark,null,newConfig.getRefuseCode());
+                    msg.setMsg(newConfig.getRefuseMsg());
+                    msg.setStatus(newConfig.getRefuseCode());
+                    return  msg;
+                }
+                //会签任务通过
+                msg.setMsg(newConfig.getCompleteMsg());
+                msg.setStatus(newConfig.getCompleteCode());
+                return msg;
+            }
+
+            //非最后一个会签任务情况下，正常返回执行状态
+            List<ProcessEntity> data =new ArrayList<>() ;
+            ProcessEntity entity =new ProcessEntity();
+            entity.setRemark(remark);
+            //entity.setStatus(config.getSuccessCode());
+            entity.setProcessId(processId);
+            data.add(entity);
+            remsg.setData(data);
+            if (judgement == "NO") {
+                remsg.setMsg(newConfig.getRefuseMsg());//"审批不通过"
+                remsg.setStatus(newConfig.getRefuseCode());
+            }
+            remsg.setMsg(newConfig.getCompleteMsg());//"审批通过"
+            remsg.setStatus(newConfig.getCompleteCode());
+            return  remsg;
+        }
 
         //审核不通过，删除任务，插入任务流程数据
         if (judgement=="NO"){
@@ -139,8 +179,10 @@ public class ApprovalServiceImpl implements ApprovalService {
             remsg.setStatus(newConfig.getEndCode());
             return remsg;
         }
+
+
+        //指定下一个任务的办理人
         taskService.setAssignee(nextTask.getId(), assignee);
-        //nextTask.setAssignee(assignee);
         List<ProcessEntity> data =new ArrayList<>() ;
         ProcessEntity entity =new ProcessEntity();
         entity.setRemark(remark);
@@ -152,7 +194,29 @@ public class ApprovalServiceImpl implements ApprovalService {
         remsg.setMsg(newConfig.getCompleteMsg());//"审批通过"
         remsg.setStatus(newConfig.getCompleteCode());
         return remsg;
+
     }
+
+    //多人会签
+    public Message multiSign(String taskId,String judgement,String remark,String assignee){
+        //获取任务标签
+        String processId = taskService.createTaskQuery().taskId(taskId).singleResult().getProcessInstanceId();
+        //只要是会签任务，直接执行
+        Message msg= startTask(taskId,judgement, remark, "");
+        String nextTaskId = taskService.createTaskQuery().processInstanceId(processId).singleResult().getId();
+//        Task currentTask = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String nextTaskLabel=taskService.createTaskQuery().taskId(nextTaskId).singleResult().getDescription();
+        if (nextTaskLabel!="sign"){
+            int count=(Integer) taskService.getVariables(taskId).get("count");
+            //设置赞同票的数量
+            if(count>6){
+                taskService.deleteTask(nextTaskId);
+            return msg;
+            }
+        }
+        return msg;
+    }
+
 
     @Override
     public Message roleManagement(String name, String group) {

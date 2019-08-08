@@ -20,6 +20,9 @@ public class NewConfig {
     private int endCode;
     private String endMsg ;
 
+    //会签审核结果不通过
+    private String signMsg;
+
     public int getRefuseCode() {
         return refuseCode;
     }
@@ -66,5 +69,13 @@ public class NewConfig {
 
     public void setEndMsg(String endMsg) {
         this.endMsg = endMsg;
+    }
+
+    public String getSignMsg() {
+        return signMsg;
+    }
+
+    public void setSignMsg(String signMsg) {
+        this.signMsg = signMsg;
     }
 }
