@@ -9,8 +9,10 @@ import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.message.ResponseMessage;
 import com.cmb.bankcheck.service.ApprovalService;
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.GroupQuery;
 import org.activiti.engine.impl.GroupQueryImpl;
 import org.activiti.engine.impl.form.TaskElContext;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 /**
  * created by chenhanping
@@ -54,6 +57,9 @@ public class ApprovalServiceImpl implements ApprovalService {
     private HistoryService historyService;
 
     @Autowired
+    private IdentityService identityService;
+
+    @Autowired
     private NewConfig newConfig;
 
     @Override
@@ -65,21 +71,25 @@ public class ApprovalServiceImpl implements ApprovalService {
             return msg;
         }
 
+
         TaskQuery taskQuery = taskService.createTaskQuery();
-        taskQuery.taskAssignee(assignee);
+
+        // 查询组任务
+        taskQuery.taskCandidateOrAssigned(assignee);
+
         List<Task> taskList = taskQuery.list();
         ResponseMessage<TaskEntity> resMsg=new ResponseMessage<>();
         List<TaskEntity> data=new ArrayList<>();
         for (Task task:taskList) {
             TaskEntity entity=new TaskEntity();
-            entity.setAssignee(assignee);
+            entity.setAssignee(task.getAssignee());
             //返回group
-            entity.setGroupId(task.getCategory());
+            entity.setGroupId(task.getName());
             entity.setTaskId(task.getId());
             entity.setUpdateTime(task.getCreateTime());
-            entity.setTaskName(task.getName());
+            entity.setTaskName(task.getName()+"审批");
             entity.setProcessInstanceId(task.getProcessInstanceId());
-
+            //entity.setCandidates();
             data.add(entity);
         }
         resMsg.setData(data);
