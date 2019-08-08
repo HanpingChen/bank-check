@@ -25,10 +25,18 @@ public class EmployeeEntity {
     private String city;
 
     // 机构代码
-    private String code;
+    private String branch;
 
     // 处理业务类型，只有业务管理部门的员工有，其他员工均为null
     private String type;
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
 
     public String getType() {
         return type;
@@ -46,13 +54,7 @@ public class EmployeeEntity {
         this.city = city;
     }
 
-    public String getCode() {
-        return code;
-    }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getPosition() {
         return position;
