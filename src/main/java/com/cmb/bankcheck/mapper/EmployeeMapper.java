@@ -22,8 +22,8 @@ public interface EmployeeMapper {
      * @param apart
      * @return
      */
-    @Select("select * from employee where apart = #{apart}")
-    public List<EmployeeEntity> queryEmployeeByApart(@Param("apart") String apart);
+    @Select("select id from employee where apart = #{apart}")
+    public List<String> queryEmployeeByApart(@Param("apart") String apart);
 
 
     @Select("select password from employee where id = #{id}")
@@ -37,4 +37,10 @@ public interface EmployeeMapper {
 
     @Select("select distinct position from employee")
     public List<String> queryAllPosition();
+
+    @Select("select id from employee where branch=#{branch} and apart=#{apart} and (position='审批人' or position='部门主管')")
+    public List<String> queryHandler(@Param("branch") String branch,@Param("apart") String apart);
+
+
+
 }
