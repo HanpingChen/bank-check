@@ -8,6 +8,7 @@ import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.message.ResponseMessage;
 import com.cmb.bankcheck.service.ApprovalService;
+import com.cmb.bankcheck.task.ApprovalServiceAbstracter;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -20,6 +21,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.lang.model.element.NestingKind;
 import javax.swing.text.StyledEditorKit;
 import java.util.ArrayList;
@@ -56,6 +58,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Autowired
     private NewConfig newConfig;
+
+    @Resource(name="personTask")
+    private ApprovalServiceAbstracter approvalService;
+
+
 
     @Override
     public Message queryTask(String assignee) {

@@ -8,12 +8,13 @@ import com.cmb.bankcheck.message.ResponseMessage;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-public abstract class ApprovalServiceAbstract {
+@Service
+public abstract class ApprovalServiceAbstracter {
 
     @Autowired
     public TaskService taskService;
@@ -39,6 +40,20 @@ public abstract class ApprovalServiceAbstract {
     }
 
     //任务执行，返回状态信息
+
+    /**
+     * @param processId
+     * @param msg
+     * @param statusCode
+     * @return
+     *
+     * 执行完成后返回信息：
+     * 1.userId
+     * 2.processId
+     * 3.CompleteTime
+     * 4.msg 任务执行状态信息
+     * 5.statusCode
+     */
     public Message returnMsg(String processId,String msg,int statusCode){
         ResponseMessage<ProcessEntity> remsg=new ResponseMessage<ProcessEntity>();
         ProcessEntity entity=new ProcessEntity();
@@ -55,5 +70,8 @@ public abstract class ApprovalServiceAbstract {
         remsg.setStatus(statusCode);
         return remsg;
     }
+
+    //启动任务
+    public abstract Message startTask(String taskId, String judgement, String remark,String assignee);
 
 }
