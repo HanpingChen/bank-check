@@ -21,4 +21,11 @@ public class MessageUtil<T> {
         message.setSize(data.size());
         return message;
     }
+
+    public static Message setMsg(int status, String msg){
+        Message message = new Message();
+        message.setMsg(msg);
+        message.setStatus(status);
+        return message;
+    }
 }

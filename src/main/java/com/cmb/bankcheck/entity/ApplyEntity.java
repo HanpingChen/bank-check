@@ -40,6 +40,17 @@ public class ApplyEntity {
     // 客户规模，效益有无不良贷款
     private String situation;
 
+    // 办理机构
+    private String branch;
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
     public String getApplyId() {
         return applyId;
     }
