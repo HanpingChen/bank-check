@@ -26,7 +26,6 @@ import java.util.Map;
  * Time:20:17
  * 模板方法，将启动流程实例的过程作为模板
  */
-@Service
 public abstract class AbstractStarter {
 
     protected ActivitiService service;

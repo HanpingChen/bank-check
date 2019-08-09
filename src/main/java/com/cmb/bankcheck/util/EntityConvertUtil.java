@@ -1,7 +1,9 @@
 package com.cmb.bankcheck.util;
 
+import com.cmb.bankcheck.entity.ProcessDefinitionEntity;
 import com.cmb.bankcheck.entity.ProcessEntity;
 import com.cmb.bankcheck.entity.TaskEntity;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
@@ -50,5 +52,14 @@ public class EntityConvertUtil {
         entity.setProcessInstanceId(task.getProcessInstanceId());
         return entity;
 
+    }
+
+    public static ProcessDefinitionEntity convertProcessDef(ProcessDefinition definition){
+        ProcessDefinitionEntity entity = new ProcessDefinitionEntity();
+        entity.setKey(definition.getKey());
+        entity.setId(definition.getId());
+        entity.setName(definition.getName());
+        entity.setVersion(definition.getVersion());
+        return entity;
     }
 }
