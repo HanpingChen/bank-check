@@ -1,25 +1,18 @@
 package com.cmb.bankcheck.service.impl;
 
-import com.cmb.bankcheck.entity.ProcessEntity;
-import com.cmb.bankcheck.mapper.EmployeeMapper;
-import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.service.ActivitiService;
-import com.cmb.bankcheck.util.BeanUtil;
-import com.cmb.bankcheck.util.EntityConvertUtil;
-import com.cmb.bankcheck.util.TaskUtil;
 import org.activiti.engine.IdentityService;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.beans.IntrospectionException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * created by chenhanping
@@ -40,6 +33,9 @@ public class ActivitiServiceImpl implements ActivitiService {
     @Autowired
     private IdentityService identityService;
 
+    @Autowired
+    private RepositoryService repositoryService;
+
 
 
     @Override
@@ -50,5 +46,12 @@ public class ActivitiServiceImpl implements ActivitiService {
     @Override
     public Task queryTaskByProcessId(String processId) {
         return taskService.createTaskQuery().processInstanceId(processId).singleResult();
+    }
+
+    @Override
+    public List<ProcessDefinition> queryAllProcess() {
+        ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery();
+        processDefinitionQuery.latestVersion();
+        return processDefinitionQuery.list();
     }
 }

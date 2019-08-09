@@ -24,9 +24,8 @@ import java.util.Map;
  * Time:20:18
  * 减免审批流程的启动类，集成抽象启动类，实现具体的启动方法
  */
-@Component
+@Component("discount")
 public class DiscountStarter extends AbstractStarter {
-
     @Autowired
     public void setRuntimeService(RuntimeService runtimeService){
 
@@ -89,5 +88,10 @@ public class DiscountStarter extends AbstractStarter {
             taskService.addCandidateUser(taskId, candidate);
         }
         return candidates;
+    }
+
+    @Override
+    public String toString() {
+        return "this is discount starter";
     }
 }
