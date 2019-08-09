@@ -30,6 +30,17 @@ public class EmployeeEntity {
     // 处理业务类型，只有业务管理部门的员工有，其他员工均为null
     private String type;
 
+    // 支行名称
+    private String subbranch;
+
+    public String getSubbranch() {
+        return subbranch;
+    }
+
+    public void setSubbranch(String subbranch) {
+        this.subbranch = subbranch;
+    }
+
     public String getBranch() {
         return branch;
     }

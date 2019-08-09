@@ -43,6 +43,14 @@ public class ApplyEntity {
     // 办理机构
     private String branch;
 
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
     public String getApplyId() {
         return applyId;
     }
