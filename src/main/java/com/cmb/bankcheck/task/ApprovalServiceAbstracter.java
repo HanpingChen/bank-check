@@ -57,7 +57,7 @@ public abstract class ApprovalServiceAbstracter {
     public Message returnMsg(String processId,String msg,int statusCode){
         ResponseMessage<ProcessEntity> remsg=new ResponseMessage<ProcessEntity>();
         ProcessEntity entity=new ProcessEntity();
-        List<ProcessEntity> processEntities=processMapper.querytProcessByProcessId(processId);
+        List<ProcessEntity> processEntities=processMapper.queryProcessByProcessId(processId);
         ProcessEntity  entityInProcessTable=processEntities.get(0);
         String userId=entityInProcessTable.getUserId();
         entity.setUserId(userId);
