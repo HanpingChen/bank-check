@@ -8,10 +8,12 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,5 +55,22 @@ public class ActivitiServiceImpl implements ActivitiService {
         ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery();
         processDefinitionQuery.latestVersion();
         return processDefinitionQuery.list();
+    }
+
+    @Override
+    public List<Task> queryTaskByCandidateOrAssignee(String employeeId) {
+
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateOrAssigned(employeeId).list();
+        return tasks;
+    }
+
+    @Override
+    public List<String> queryCandidateByTask(String taskId) {
+        List<String> candidates = new ArrayList<>();
+        List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
+        for (IdentityLink link:identityLinksForTask){
+            candidates.add(link.getUserId());
+        }
+        return candidates;
     }
 }
