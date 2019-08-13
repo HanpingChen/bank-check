@@ -57,8 +57,9 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Autowired
     private NewConfig newConfig;
 
+    //默认初始化任务为普通任务
     @Resource(name="personTask")
-    private ApprovalServiceAbstracter approvalService;
+    private ApprovalServiceAbstracter taskInstance;
 
 
     @Override
@@ -100,33 +101,28 @@ public class ApprovalServiceImpl implements ApprovalService {
            *1.删除当前任务
            *2.并更新历史数据*/
 
-        if (taskId==null || judgement==null ||assignee==null){
+        if (taskId==null || judgement==null ){
             Message msg=new Message();
             msg.setMsg("字段不全");
             msg.setStatus(config.getErrorCode());
             return msg;
         }
 
-        Message msg=new Message();
-        ResponseMessage<ProcessEntity> remsg = new ResponseMessage<>();
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processId=task.getProcessInstanceId();
-        String label =task.getDescription();
-        System.out.println("该任务为："+label+"任务");
+        /**
+         *  任务执行，工厂类动态加载相关任务类，默认是普通任务personTask，动态加载其他类（这里其他类只有一个会签任务类）
+         * 注意，默认类需要重新手动加载，否在会使用上一个类型任务创建的实例
+         */
 
-        //会签任务
-        if(label!=null && label.equals("sign")){
-             System.out.println("启动会签任务");
-             ApprovalServiceAbstracter multiTask= TaskFactory.createTask("multiTask");
-             System.out.println("监测到了会签任务，启动成功");
-             return multiTask.startTask( taskId,judgement,remark,assignee);
-        }else{
-            //非会签任务
-            System.out.println("启动普通任务");
-            ApprovalServiceAbstracter personTask=TaskFactory.createTask("personTask");
-            System.out.println("监测到了普通任务，启动成功");
-            return personTask.startTask( taskId,judgement,remark,assignee);
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String label =task.getDescription();
+        ApprovalServiceAbstracter tempStarter = TaskFactory.createTask(label);
+        if (tempStarter!=null){
+           taskInstance = tempStarter;
+        }else {
+            taskInstance=TaskFactory.createTask("personTask");
         }
+        Message msg=taskInstance.startTask( taskId,judgement,remark,assignee);
+        return msg;
     }
 
     @Override
