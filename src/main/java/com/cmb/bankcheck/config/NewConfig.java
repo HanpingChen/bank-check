@@ -23,6 +23,17 @@ public class NewConfig {
     //会签审核结果不通过
     private String signMsg;
 
+    //会签最低同意人数
+    private  int count;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public int getRefuseCode() {
         return refuseCode;
     }
@@ -78,4 +89,7 @@ public class NewConfig {
     public void setSignMsg(String signMsg) {
         this.signMsg = signMsg;
     }
+
+
+
 }
