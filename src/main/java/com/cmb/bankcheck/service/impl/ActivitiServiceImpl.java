@@ -1,6 +1,8 @@
 package com.cmb.bankcheck.service.impl;
 
+import com.cmb.bankcheck.mapper.EmployeeMapper;
 import com.cmb.bankcheck.service.ActivitiService;
+import com.cmb.bankcheck.util.TaskUtil;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -38,6 +40,9 @@ public class ActivitiServiceImpl implements ActivitiService {
     @Autowired
     private RepositoryService repositoryService;
 
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
 
 
     @Override
@@ -71,6 +76,17 @@ public class ActivitiServiceImpl implements ActivitiService {
         for (IdentityLink link:identityLinksForTask){
             candidates.add(link.getUserId());
         }
+        return candidates;
+    }
+
+    @Override
+    public List<String> queryCandidatesByTaskName(String branch,String taskName) {
+        // 获取任务名称中的部门名称
+        String apart = TaskUtil.getApartNameFromTask(taskName);
+        // 根据任务名称获取position
+        String position = TaskUtil.getPosition(taskName);
+        // 根据部门名称、机构代码查询对应的处理人
+        List<String> candidates = employeeMapper.queryHandler(branch, apart, position);
         return candidates;
     }
 }

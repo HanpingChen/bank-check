@@ -48,4 +48,12 @@ public interface ActivitiService {
      * @return
      */
     List<String> queryCandidateByTask(String taskId);
+
+    /**
+     * 通过任务名字查询相应的处理候选人(此时任务还未设置候选人)
+     * @param taskName
+     * @param branch 当前任务所属的机构代码
+     * @return
+     */
+    List<String> queryCandidatesByTaskName(String branch, String taskName);
 }

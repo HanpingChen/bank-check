@@ -12,6 +12,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +60,9 @@ public class DiscountStarter extends AbstractStarter {
     @Autowired
     ApplyMapper applyMapper;
 
+    @Autowired
+    private ActivitiService activitiService;
+
     @Override
     Map<String, Object> initVariable(Object bean, String processId) {
         HashMap<String, Object> map = null;
@@ -92,12 +96,7 @@ public class DiscountStarter extends AbstractStarter {
         // 获取任务的名称以及任务的id
         String taskName = task.getName();
         String taskId = task.getId();
-        // 获取任务名称中的部门名称
-        String apart = TaskUtil.getApartNameFromTask(taskName);
-        // 根据任务名称获取position
-        String position = TaskUtil.getPosition(taskName);
-        // 根据部门名称、机构代码查询对应的处理人
-        List<String> candidates = employeeMapper.queryHandler(branch, apart, position);
+        List<String> candidates = activitiService.queryCandidatesByTaskName(branch, taskName);
         for (String candidate:candidates){
             taskService.addCandidateUser(taskId, candidate);
         }
