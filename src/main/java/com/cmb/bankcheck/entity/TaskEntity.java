@@ -18,11 +18,22 @@ public class TaskEntity {
     // 所属的流程实例的id
     private String processInstanceId;
 
+    // 时间字符串
+    private String timeStr;
+
     // 流程的key
     private String processKey;
 
     // 候选人
     private String candidates;
+
+    public String getTimeStr() {
+        return timeStr;
+    }
+
+    public void setTimeStr(String timeStr) {
+        this.timeStr = timeStr;
+    }
 
     public String getCandidates() {
         return candidates;

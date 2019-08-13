@@ -48,7 +48,10 @@ public class EntityConvertUtil {
         entity.setGroupId(task.getName());
         entity.setTaskId(task.getId());
         entity.setUpdateTime(task.getCreateTime());
+        entity.setProcessKey(task.getProcessDefinitionId().split(":")[0]);
         entity.setTaskName(task.getName()+"审批");
+        // 设置时间字符串
+        entity.setTimeStr(task.getCreateTime().toLocaleString());
         entity.setProcessInstanceId(task.getProcessInstanceId());
         return entity;
 

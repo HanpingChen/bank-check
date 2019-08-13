@@ -11,11 +11,11 @@ public class ApplyEntity {
 
     private String userId;
 
-    private String userName;
+    private String username;
 
     private String msg;
 
-    private String key;
+    private String processKey;
 
     // 发起人（员工）
     private String starter;
@@ -124,12 +124,12 @@ public class ApplyEntity {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getMsg() {
@@ -140,11 +140,11 @@ public class ApplyEntity {
         this.msg = msg;
     }
 
-    public String getKey() {
-        return key;
+    public String getProcessKey() {
+        return processKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setProcessKey(String processKey) {
+        this.processKey = processKey;
     }
 }

@@ -4,17 +4,12 @@ import com.cmb.bankcheck.comon.StarterFactory;
 import com.cmb.bankcheck.config.AppConfig;
 import com.cmb.bankcheck.entity.*;
 import com.cmb.bankcheck.mapper.CustomerMapper;
-import com.cmb.bankcheck.mapper.EmployeeMapper;
-import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.service.ActivitiService;
 import com.cmb.bankcheck.service.CustomerService;
 import com.cmb.bankcheck.starter.AbstractStarter;
 import com.cmb.bankcheck.util.EntityConvertUtil;
 import com.cmb.bankcheck.util.MessageUtil;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Message startProcess(ApplyEntity apply) {
-        String key = apply.getKey();
+        String key = apply.getProcessKey();
         String userId = apply.getUserId();
         String Xmtype = apply.getXmtype();
         float amt = apply.getAmt();

@@ -1,5 +1,9 @@
 package com.cmb.bankcheck.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * created by chenhanping
  * Designer:chenhanping
@@ -45,5 +49,21 @@ public class TaskUtil {
         else {
             return "审批人";
         }
+    }
+
+    public static List<String> convertCandidates(String candidates){
+        String[] strings = candidates.split(",");
+        return new ArrayList<>(Arrays.asList(strings));
+    }
+
+    public static String convertCandidates(List<String> candidates){
+        StringBuilder sb = new StringBuilder();
+        for (int i=0;i<candidates.size();i++){
+            sb.append(candidates.get(i));
+            if (i != candidates.size()-1){
+                sb.append(",");
+            }
+        }
+        return sb.toString();
     }
 }

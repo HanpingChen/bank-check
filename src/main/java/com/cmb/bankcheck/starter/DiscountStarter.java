@@ -1,5 +1,7 @@
 package com.cmb.bankcheck.starter;
 
+import com.cmb.bankcheck.entity.ApplyEntity;
+import com.cmb.bankcheck.mapper.ApplyMapper;
 import com.cmb.bankcheck.mapper.EmployeeMapper;
 import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.service.ActivitiService;
@@ -22,7 +24,7 @@ import java.util.Map;
  * Designer:chenhanping
  * Date:2019-08-08
  * Time:20:18
- * 减免审批流程的启动类，集成抽象启动类，实现具体的启动方法
+ * 减免审批流程的启动类，继承抽象启动类，实现具体的启动方法
  */
 @Component("discount")
 public class DiscountStarter extends AbstractStarter {
@@ -54,6 +56,9 @@ public class DiscountStarter extends AbstractStarter {
         super.taskService = taskService;
     }
 
+    @Autowired
+    ApplyMapper applyMapper;
+
     @Override
     Map<String, Object> initVariable(Object bean, String processId) {
         HashMap<String, Object> map = null;
@@ -65,7 +70,12 @@ public class DiscountStarter extends AbstractStarter {
             map.put("assignees",assignees);
             map.put("count",0);
             this.runtimeService.setVariables(processId, map);
+            ApplyEntity entity = (ApplyEntity) bean;
+            entity.setApplyId(processId);
+            // 写入数据库
+            applyMapper.insertApply(entity);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return null;
         }
         return map;
