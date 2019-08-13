@@ -57,21 +57,16 @@ public class PersonApprovalService extends ApprovalServiceAbstracter {
 
         //审核通过的情况下，任务执行，并且指定下一个任务的办理人
         //this.completeTask(taskId);
-        taskService.complete(taskId);
-        System.out.println(taskId+" "+processId);
-        List<Task> nextTasks = taskService.createTaskQuery().processInstanceId(processId).list();
-        System.out.println("............下一个任务.......................");
-        System.out.println(nextTasks);
-        System.out.println(".............................................");
+        this.taskService.complete(taskId);
+        List<Task> nextTasks = this.taskService.createTaskQuery().processInstanceId(processId).list();
+
         //任务通过，且流程结束
-        if (nextTasks == null){
+        if (nextTasks.size()==0){
             /**1.需要更新process表，流程状态，结束时间
              *2.更新完成返回process表的内容
              */
             ProcessEntity entity=new ProcessEntity();
-            System.out.println(".............完成任务，更新process表...........");
             this.processMapper.updateProcessByProcessId(processId,remark,new Date(),newConfig.getEndCode());
-            System.out.println("..............完成任务，完成process表更新...........");
             String message="任务审核通过,当前任务办理结束";
             int statusCode=newConfig.getEndCode();
             Message msg=returnMsg(processId,message,statusCode);

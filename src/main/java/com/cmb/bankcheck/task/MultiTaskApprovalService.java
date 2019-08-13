@@ -35,6 +35,7 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
         super.newConfig=newConfig;
     }
 
+
     @Override
     public Message startTask(String taskId, String judgement, String remark,String assignee){
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
@@ -57,8 +58,8 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
         //达到审批委员会的总审批人数，即委员会有人都审批完毕
         if (nrOfCompletedInstances==nrOfInstances){
             int count=(int) taskService.getVariables(nextTaskId).get("count");
-            if(count<2){
-
+            //从配置文件中加载会签通过的最低人数
+            if(count<newConfig.getCount()){
                 //委员会通票数不够，删除任务。
                 deleteTask(processId,remark);
                 String message=newConfig.getRefuseMsg()+printMes;
@@ -86,5 +87,4 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
         return  msg;
     }
 }
-
 
