@@ -64,13 +64,17 @@ public class DiscountStarter extends AbstractStarter {
         HashMap<String, Object> map = null;
         try {
             map = BeanUtil.convertBean(bean);
+            System.out.println(map);
             // 还需要将委员会名单设置
             // 从数据库中查询管理委员会
             List<String> assignees = employeeMapper.queryEmployeeByApart("管理委员会");
+            System.out.println(assignees);
             map.put("assignees",assignees);
             map.put("count",0);
-            this.runtimeService.setVariables(processId, map);
             ApplyEntity entity = (ApplyEntity) bean;
+//            map.remove("amt");
+//            map.put("amt",(double)entity.getAmt());
+            this.runtimeService.setVariables(processId, map);
             entity.setApplyId(processId);
             // 写入数据库
             applyMapper.insertApply(entity);

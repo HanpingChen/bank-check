@@ -57,8 +57,9 @@ public class PersonApprovalService extends ApprovalServiceAbstracter {
 
         //审核通过的情况下，任务执行，并且指定下一个任务的办理人
         //this.completeTask(taskId);
-        this.taskService.complete(taskId);
-        List<Task> nextTasks = this.taskService.createTaskQuery().processInstanceId(processId).list();
+        taskService.complete(taskId);
+        System.out.println(taskId+" "+processId);
+        List<Task> nextTasks = taskService.createTaskQuery().processInstanceId(processId).list();
         System.out.println("............下一个任务.......................");
         System.out.println(nextTasks);
         System.out.println(".............................................");

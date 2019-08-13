@@ -19,7 +19,7 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
-    @RequestMapping(value = "employ/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/employ/login",method = RequestMethod.POST)
     public Message login(@Param("id")String id, @Param("password") String password){
         return loginService.login(id, password);
     }

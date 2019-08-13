@@ -46,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
         String key = apply.getProcessKey();
         String userId = apply.getUserId();
         String Xmtype = apply.getXmtype();
-        float amt = apply.getAmt();
+        double amt = apply.getAmt();
         System.out.println(key + ""+ Xmtype);
         if (key == null || userId == null || Xmtype == null || amt == 0){
             Message msg = new Message();

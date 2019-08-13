@@ -1,6 +1,7 @@
 package com.cmb.bankcheck.service;
 
 import com.cmb.bankcheck.entity.ApplyEntity;
+import com.cmb.bankcheck.message.Message;
 
 /**
  * created by chenhanping
@@ -16,4 +17,17 @@ public interface ApplyService {
      * @return
      */
     ApplyEntity queryApplyDetailByProcessId(String processId);
+
+    /**
+     * 通过申请单号查询
+     * @param applyId
+     * @return
+     */
+    Message queryApply(String applyId);
+
+    /**
+     * 查询apply申请单的字段与属性名对应的字典
+     * @return
+     */
+    Message queryApplyColumnDict();
 }

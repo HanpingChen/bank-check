@@ -1,11 +1,18 @@
 package com.cmb.bankcheck.service.impl;
 
+import com.cmb.bankcheck.config.AppConfig;
 import com.cmb.bankcheck.entity.ApplyEntity;
+import com.cmb.bankcheck.mapper.ApplyMapper;
+import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.service.ApplyService;
+import com.cmb.bankcheck.util.MessageUtil;
 import org.activiti.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +27,14 @@ public class ApplyServiceImpl implements ApplyService {
     @Autowired
     private RuntimeService runtimeService;
 
+    @Autowired
+    private ApplyMapper mapper;
+
+    @Autowired
+    AppConfig config;
+
+    Map<String, String> map = new HashMap<>();
+
     @Override
     public ApplyEntity queryApplyDetailByProcessId(String processId) {
 
@@ -30,4 +45,19 @@ public class ApplyServiceImpl implements ApplyService {
         System.out.println(variables);
         return null;
     }
+
+    @Override
+    public Message queryApply(String applyId) {
+        ApplyEntity entity = mapper.queryApplyByProcessId(applyId);
+        List<ApplyEntity> data = new ArrayList<>();
+        data.add(entity);
+        return new MessageUtil<ApplyEntity>().setMsg(data,config.getSuccessCode(),config.getSuccessMsg());
+    }
+
+    @Override
+    public Message queryApplyColumnDict() {
+        return null;
+    }
+
+
 }

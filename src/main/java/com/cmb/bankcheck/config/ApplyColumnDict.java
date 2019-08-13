@@ -1,13 +1,21 @@
-package com.cmb.bankcheck.entity;
+package com.cmb.bankcheck.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 /**
  * created by chenhanping
  * Designer:chenhanping
- * Date:2019-07-31
- * Time:11:20
- *  客户申请实体类
+ * Date:2019-08-13
+ * Time:11:54
+ * 折扣申请单的字段与属性对应字典
  */
-public class ApplyEntity {
+@Component
+@PropertySource(value = {"classpath:apply-column-dict.properties"},encoding = "UTF-8")
+@ConfigurationProperties(prefix="apply-column-dict")
+public class ApplyColumnDict {
+
 
     private String userId;
 
@@ -26,7 +34,7 @@ public class ApplyEntity {
     private String xmtype;
 
     // 减免金额
-    private double amt;
+    private String amt;
 
     // 本年度的减免记录
     private String record;
@@ -43,16 +51,7 @@ public class ApplyEntity {
     // 办理机构
     private String branch;
 
-    // 减免类型
     private String discountType;
-
-    public double getAmt() {
-        return amt;
-    }
-
-    public void setAmt(double amt) {
-        this.amt = amt;
-    }
 
     public String getDiscountType() {
         return discountType;
@@ -62,16 +61,44 @@ public class ApplyEntity {
         this.discountType = discountType;
     }
 
-    public String getBranch() {
-        return branch;
+    public String getAmt() {
+        return amt;
     }
 
-    public void setBranch(String branch) {
-        this.branch = branch;
+    public void setAmt(String amt) {
+        this.amt = amt;
     }
 
-    public String getApplyId() {
-        return applyId;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getProcessKey() {
+        return processKey;
+    }
+
+    public void setProcessKey(String processKey) {
+        this.processKey = processKey;
     }
 
     public String getStarter() {
@@ -82,6 +109,14 @@ public class ApplyEntity {
         this.starter = starter;
     }
 
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
+    }
+
     public String getXmtype() {
         return xmtype;
     }
@@ -90,9 +125,6 @@ public class ApplyEntity {
         this.xmtype = xmtype;
     }
 
-    public void setApplyId(String applyId) {
-        this.applyId = applyId;
-    }
 
     public String getRecord() {
         return record;
@@ -126,35 +158,11 @@ public class ApplyEntity {
         this.situation = situation;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getBranch() {
+        return branch;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public String getProcessKey() {
-        return processKey;
-    }
-
-    public void setProcessKey(String processKey) {
-        this.processKey = processKey;
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 }
