@@ -9,8 +9,13 @@ import com.cmb.bankcheck.entity.TaskEntity;
 import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.message.ResponseMessage;
+import com.cmb.bankcheck.service.ActivitiService;
 import com.cmb.bankcheck.service.ApprovalService;
 import com.cmb.bankcheck.task.ApprovalServiceAbstracter;
+import com.cmb.bankcheck.util.BeanUtil;
+import com.cmb.bankcheck.util.EntityConvertUtil;
+import com.cmb.bankcheck.util.MessageUtil;
+import com.cmb.bankcheck.util.TaskUtil;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -57,6 +62,9 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Autowired
     private NewConfig newConfig;
 
+    @Autowired
+    ActivitiService activitiService;
+
     //默认初始化任务为普通任务
     @Resource(name="personTask")
     private ApprovalServiceAbstracter taskInstance;
@@ -71,27 +79,15 @@ public class ApprovalServiceImpl implements ApprovalService {
             return msg;
         }
 
-        TaskQuery taskQuery = taskService.createTaskQuery();
-        taskQuery.taskAssignee(assignee);
-        List<Task> taskList = taskQuery.list();
-        ResponseMessage<TaskEntity> resMsg=new ResponseMessage<>();
+        List<Task> taskList = activitiService.queryTaskByCandidateOrAssignee(assignee);
         List<TaskEntity> data=new ArrayList<>();
         for (Task task:taskList) {
-            TaskEntity entity=new TaskEntity();
-            entity.setAssignee(assignee);
-            //返回group
-            entity.setGroupId(task.getCategory());
-            entity.setTaskId(task.getId());
-            entity.setUpdateTime(task.getCreateTime());
-            entity.setTaskName(task.getName());
-            entity.setProcessInstanceId(task.getProcessInstanceId());
-            data.add(entity);
+            TaskEntity taskEntity = EntityConvertUtil.convertTask(task);
+            List<String> candidates = activitiService.queryCandidateByTask(taskEntity.getTaskId());
+            taskEntity.setCandidates(TaskUtil.convertCandidates(candidates));
+            data.add(taskEntity);
         }
-        resMsg.setData(data);
-        resMsg.setSize(data.size());
-        resMsg.setStatus(config.getSuccessCode());
-        resMsg.setMsg(config.getSuccessMsg());
-        return resMsg;
+        return new MessageUtil<TaskEntity>().setMsg(data, config.getSuccessCode(),config.getSuccessMsg());
     }
 
     @Override
