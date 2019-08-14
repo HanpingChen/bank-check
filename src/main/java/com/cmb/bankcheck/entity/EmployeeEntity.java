@@ -33,12 +33,11 @@ public class EmployeeEntity {
     // 支行名称
     private String subbranch;
 
-    public String getSubbranch() {
-        return subbranch;
-    }
-
     public void setSubbranch(String subbranch) {
         this.subbranch = subbranch;
+    }
+    public String getSubbranch() {
+        return subbranch;
     }
 
     public String getBranch() {

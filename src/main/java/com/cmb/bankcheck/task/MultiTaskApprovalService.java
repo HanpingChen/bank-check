@@ -81,7 +81,7 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
             String taskName = nextTask.getName();
             String branch=(String) taskService.getVariables(nextTask.getId()).get("branch");
             //获取候选人名单
-            List<String> candidates = activitiService.queryCandidatesByTaskName(branch, taskName);
+            List<String> candidates = activitiService.queryCandidatesByTaskName(task);
             //设置候选人
             for (String candidate :candidates) {
                 taskService.addCandidateUser(nextTask.getId(),candidate);

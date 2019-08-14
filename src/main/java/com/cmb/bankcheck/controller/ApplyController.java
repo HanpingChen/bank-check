@@ -44,7 +44,6 @@ public class ApplyController {
     public Message queryColumnDict(){
         List<ApplyColumnDict> data = new ArrayList<>();
         data.add(dict);
-        System.out.println(dict.getMsg());
         return new MessageUtil<ApplyColumnDict>().setMsg(data,config.getSuccessCode(),config.getSuccessMsg());
     }
 }

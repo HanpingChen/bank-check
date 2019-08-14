@@ -89,7 +89,7 @@ public class PersonApprovalService extends ApprovalServiceAbstracter {
             String taskName = nextTask.getName();
             String branch=(String) taskService.getVariables(nextTask.getId()).get("branch");
             //获取候选人名单
-            List<String> candidates = activitiService.queryCandidatesByTaskName(branch, taskName);
+            List<String> candidates = activitiService.queryCandidatesByTaskName(nextTask);
             System.out.println("普通任务候选人"+candidates);
             //设置候选人
             for (String candidate :candidates) {
