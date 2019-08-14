@@ -43,7 +43,7 @@ public interface ProcessMapper {
      * @return
      */
     @Select("select * from process where process_id=#{processId}")
-    public List<ProcessEntity> querytProcessByProcessId(@Param("processId") String processId);
+    public List<ProcessEntity> queryProcessByProcessId(@Param("processId") String processId);
 
     /**更新process表中用户的任务状态
      * 1,审批不通过时，需更新process表为不同过的状态
