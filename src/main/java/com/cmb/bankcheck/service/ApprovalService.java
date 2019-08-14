@@ -12,8 +12,9 @@ public interface ApprovalService {
     //查询待办任务
     Message queryTask(String assignee);
     //办理任务
-    Message startTask(String taskId,String judgement,String remark,String assignee);
+    Message startTask(String taskId,String judgement,String remark);
     //设置角色
     Message roleManagement(String name,String group);
-
+    //拾取任务
+    Message acquireTask(String taskId,String assignee);
 }

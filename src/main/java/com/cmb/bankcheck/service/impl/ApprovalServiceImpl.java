@@ -91,7 +91,16 @@ public class ApprovalServiceImpl implements ApprovalService {
     }
 
     @Override
-    public Message startTask(String taskId,String judgement,String remark,String assignee) {
+    public Message acquireTask(String taskId, String assignee) {
+        taskService.claim(taskId,assignee);
+        Message msg=new Message();
+        msg.setMsg("获得此任务");
+        msg.setStatus(config.getSuccessCode());
+        return msg;
+    }
+
+    @Override
+    public Message startTask(String taskId,String judgement,String remark) {
           /*根据传进来的任务id，以及审批人自己的决定来确定是否同意任务。
            *前段传进的参数包括，待执行任务id,决定：不/同意,审批意见，指定下一个任务审批人
            *1.删除当前任务
@@ -110,14 +119,16 @@ public class ApprovalServiceImpl implements ApprovalService {
          */
 
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        System.out.println("打印label");
         String label =task.getDescription();
+        System.out.println("label为:"+label);
         ApprovalServiceAbstracter tempStarter = TaskFactory.createTask(label);
         if (tempStarter!=null){
            taskInstance = tempStarter;
         }else {
             taskInstance=TaskFactory.createTask("personTask");
         }
-        Message msg=taskInstance.startTask( taskId,judgement,remark,assignee);
+        Message msg=taskInstance.startTask( taskId,judgement,remark);
         return msg;
     }
 

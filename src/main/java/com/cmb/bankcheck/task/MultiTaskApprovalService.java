@@ -3,11 +3,14 @@ package com.cmb.bankcheck.task;
 import com.cmb.bankcheck.config.NewConfig;
 import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
+import com.cmb.bankcheck.service.ActivitiService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component("multiTask")
 public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
@@ -35,9 +38,11 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
         super.newConfig=newConfig;
     }
 
+    @Autowired
+    public ActivitiService activitiService;
 
     @Override
-    public Message startTask(String taskId, String judgement, String remark,String assignee){
+    public Message startTask(String taskId, String judgement, String remark){
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processId=task.getProcessInstanceId();
         int nrOfInstances=(int) taskService.getVariables(taskId).get("nrOfInstances");
@@ -67,10 +72,20 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
                 Message msg=returnMsg(processId,message,statusCode);
                 return  msg;
             }
-            //会签任务通过
+            //会签任务通过,并设置下一任务的候选处理人
             String message=newConfig.getCompleteMsg()+printMes;
             int statusCode=newConfig.getCompleteCode();
             Message msg=returnMsg(processId,message,statusCode);
+            //设置候选人
+            Task nextTask= taskService.createTaskQuery().processInstanceId(processId).list().get(0);
+            String taskName = nextTask.getName();
+            String branch=(String) taskService.getVariables(nextTask.getId()).get("branch");
+            //获取候选人名单
+            List<String> candidates = activitiService.queryCandidatesByTaskName(branch, taskName);
+            //设置候选人
+            for (String candidate :candidates) {
+                taskService.addCandidateUser(nextTask.getId(),candidate);
+            }
             return msg;
         }
 
