@@ -59,9 +59,11 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
         }
 
         String printMes = "已完成人数 "+nrOfCompletedInstances;
-        String nextTaskId = taskService.createTaskQuery().processInstanceId(processId).list().get(0).getId();
+        System.out.println(printMes);
+
         //达到审批委员会的总审批人数，即委员会有人都审批完毕
         if (nrOfCompletedInstances==nrOfInstances){
+            String nextTaskId = taskService.createTaskQuery().processInstanceId(processId).list().get(0).getId();
             int count=(int) taskService.getVariables(nextTaskId).get("count");
             //从配置文件中加载会签通过的最低人数
             if(count<newConfig.getCount()){
