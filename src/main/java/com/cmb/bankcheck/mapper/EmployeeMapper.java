@@ -38,8 +38,8 @@ public interface EmployeeMapper {
     @Select("select distinct position from employee")
     public List<String> queryAllPosition();
 
-    @Select("select id from employee where branch=#{branch} and apart=#{apart} and (position=#{position} or position='部门主管')")
-    public List<String> queryHandler(@Param("branch") String branch,@Param("apart") String apart, @Param("position") String position);
+    @Select("select id from employee where branch=#{branch} and subbranch = #{subbranch} and apart=#{apart} and (position=#{position} or position='部门主管')")
+    public List<String> queryHandler(@Param("branch") String branch,@Param("subbranch") String subbranch, @Param("apart") String apart, @Param("position") String position);
 
     @Select("select branch from employee where id=#{id}")
     String queryBranch(@Param("id") String id);

@@ -1,6 +1,7 @@
 package com.cmb.bankcheck.starter;
 
 import com.cmb.bankcheck.entity.ApplyEntity;
+import com.cmb.bankcheck.entity.EmployeeEntity;
 import com.cmb.bankcheck.mapper.ApplyMapper;
 import com.cmb.bankcheck.mapper.EmployeeMapper;
 import com.cmb.bankcheck.mapper.ProcessMapper;
@@ -76,8 +77,9 @@ public class DiscountStarter extends AbstractStarter {
             map.put("assignees",assignees);
             map.put("count",0);
             ApplyEntity entity = (ApplyEntity) bean;
-//            map.remove("amt");
-//            map.put("amt",(double)entity.getAmt());
+            // 查询初始的经办人的信息，设置subbranch的信息
+            String subbranch = employeeMapper.queryEmployeeInfo(entity.getStarter()).getSubbranch();
+            map.put("subbranch",subbranch);
             this.runtimeService.setVariables(processId, map);
             entity.setApplyId(processId);
             // 写入数据库
@@ -91,12 +93,8 @@ public class DiscountStarter extends AbstractStarter {
 
     @Override
     List<String> setCandidates(Task task, Map<String, Object> map) {
-
-        String branch = (String) map.get("branch");
-        // 获取任务的名称以及任务的id
-        String taskName = task.getName();
         String taskId = task.getId();
-        List<String> candidates = activitiService.queryCandidatesByTaskName(branch, taskName);
+        List<String> candidates = activitiService.queryCandidatesByTaskName(task);
         for (String candidate:candidates){
             taskService.addCandidateUser(taskId, candidate);
         }

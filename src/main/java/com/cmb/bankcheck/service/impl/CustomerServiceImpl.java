@@ -46,9 +46,10 @@ public class CustomerServiceImpl implements CustomerService {
         String key = apply.getProcessKey();
         String userId = apply.getUserId();
         String Xmtype = apply.getXmtype();
+        String starterId = apply.getStarter();
         double amt = apply.getAmt();
         System.out.println(key + ""+ Xmtype);
-        if (key == null || userId == null || Xmtype == null || amt == 0){
+        if (key == null || userId == null || Xmtype == null || amt == 0 || starterId == null){
             Message msg = new Message();
             msg.setStatus(config.getErrorCode());
             msg.setMsg("字段不全");

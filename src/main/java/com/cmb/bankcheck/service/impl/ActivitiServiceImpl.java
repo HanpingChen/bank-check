@@ -80,13 +80,33 @@ public class ActivitiServiceImpl implements ActivitiService {
     }
 
     @Override
-    public List<String> queryCandidatesByTaskName(String branch,String taskName) {
+    public List<String> queryCandidatesByTaskName(Task task) {
+        String taskName = task.getName();
+        String branch = (String) taskService.getVariable(task.getId(),"branch");
+        String subbranch = (String) taskService.getVariable(task.getId(),"subbranch");
+        System.out.println(subbranch+" "+branch);
         // 获取任务名称中的部门名称
         String apart = TaskUtil.getApartNameFromTask(taskName);
+        // 获取当前任务审批所在的机构类型，包括
+        String taskBranchType = TaskUtil.getBranchTypeFromTaskName(taskName);
+
+        if (apart == null){
+            // 从任务中无法截取出部门名称，意味着当前任务还处于网点审批阶段，所以从流程变量中获取网点名称作为部门
+            apart = subbranch;
+        }
+        if (taskBranchType.equals("二级分行")){
+            subbranch = apart;
+        }
+        if (taskBranchType.equals("一级分行")){
+            if (!branch.equals("0551")){
+                branch = "0551";
+                subbranch = apart;
+            }
+        }
         // 根据任务名称获取position
         String position = TaskUtil.getPosition(taskName);
+        System.out.println(branch +" "+subbranch+" "+apart+" "+position);
         // 根据部门名称、机构代码查询对应的处理人
-        List<String> candidates = employeeMapper.queryHandler(branch, apart, position);
-        return candidates;
+        return employeeMapper.queryHandler(branch, subbranch,apart, position);
     }
 }

@@ -26,6 +26,9 @@ public class TaskUtil {
             apart = taskName.substring(0, apart.length()-2);
         }
 
+        if (taskName.contains("专员") || taskName.contains("网点")){
+            return null;
+        }
         return apart;
     }
 
@@ -43,12 +46,34 @@ public class TaskUtil {
         if (taskName.endsWith("主任")){
             return "主管";
         }
-        if (taskName.endsWith("专员")){
-            return "审批专员";
+        if (taskName.contains("专员")){
+            return "专员";
+        }
+        if (taskName.contains("负责人")){
+            return "负责人";
         }
         else {
             return "审批人";
         }
+    }
+
+    /**
+     * 通过任务名字截取当前审批流程所属的机构是一级分行还是二级分行
+     * @param taskName
+     * @return
+     */
+    public static String getBranchTypeFromTaskName(String taskName){
+
+        if (taskName.startsWith("一级分行")){
+            return "一级分行";
+        }
+        if (taskName.startsWith("二级分行")){
+            return "二级分行";
+        }
+        if (taskName.startsWith("总行")){
+            return "总行";
+        }
+        return "网点";
     }
 
     public static List<String> convertCandidates(String candidates){
