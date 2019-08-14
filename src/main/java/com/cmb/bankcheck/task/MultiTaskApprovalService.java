@@ -59,11 +59,10 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
         }
 
         String printMes = "已完成人数 "+nrOfCompletedInstances;
-        System.out.println(printMes);
-
         //达到审批委员会的总审批人数，即委员会有人都审批完毕
         if (nrOfCompletedInstances==nrOfInstances){
-            String nextTaskId = taskService.createTaskQuery().processInstanceId(processId).list().get(0).getId();
+            Task nextTask= taskService.createTaskQuery().processInstanceId(processId).list().get(0);
+            String nextTaskId = nextTask.getId();
             int count=(int) taskService.getVariables(nextTaskId).get("count");
             //从配置文件中加载会签通过的最低人数
             if(count<newConfig.getCount()){
@@ -79,11 +78,8 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
             int statusCode=newConfig.getCompleteCode();
             Message msg=returnMsg(processId,message,statusCode);
             //设置候选人
-            Task nextTask= taskService.createTaskQuery().processInstanceId(processId).list().get(0);
-            String taskName = nextTask.getName();
-            String branch=(String) taskService.getVariables(nextTask.getId()).get("branch");
             //获取候选人名单
-            List<String> candidates = activitiService.queryCandidatesByTaskName(task);
+            List<String> candidates = activitiService.queryCandidatesByTaskName(nextTask);
             //设置候选人
             for (String candidate :candidates) {
                 taskService.addCandidateUser(nextTask.getId(),candidate);

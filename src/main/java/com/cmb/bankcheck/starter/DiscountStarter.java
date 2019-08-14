@@ -78,8 +78,12 @@ public class DiscountStarter extends AbstractStarter {
             map.put("count",0);
             ApplyEntity entity = (ApplyEntity) bean;
             // 查询初始的经办人的信息，设置subbranch的信息
-            String subbranch = employeeMapper.queryEmployeeInfo(entity.getStarter()).getSubbranch();
+            EmployeeEntity employeeInfo = employeeMapper.queryEmployeeInfo(entity.getStarter());
+            String subbranch = employeeInfo.getSubbranch();
+            String branch = employeeInfo.getBranch();
             map.put("subbranch",subbranch);
+            // 设置当前机构代码
+            map.put("branch", branch);
             this.runtimeService.setVariables(processId, map);
             entity.setApplyId(processId);
             // 写入数据库
