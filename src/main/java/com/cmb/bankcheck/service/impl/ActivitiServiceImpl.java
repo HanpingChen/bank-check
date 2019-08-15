@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * created by chenhanping
@@ -71,12 +73,12 @@ public class ActivitiServiceImpl implements ActivitiService {
 
     @Override
     public List<String> queryCandidateByTask(String taskId) {
-        List<String> candidates = new ArrayList<>();
+        Set<String> candidates = new HashSet<>();
         List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
         for (IdentityLink link:identityLinksForTask){
             candidates.add(link.getUserId());
         }
-        return candidates;
+        return new ArrayList<>(candidates);
     }
 
     @Override

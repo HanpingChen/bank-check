@@ -10,6 +10,7 @@ import com.cmb.bankcheck.service.CustomerService;
 import com.cmb.bankcheck.starter.AbstractStarter;
 import com.cmb.bankcheck.util.EntityConvertUtil;
 import com.cmb.bankcheck.util.MessageUtil;
+import com.cmb.bankcheck.util.TaskUtil;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,8 @@ public class CustomerServiceImpl implements CustomerService {
                 // 查询任务
                 Task task = activitiService.queryTaskByProcessId(processId);
                 TaskEntity taskEntity = EntityConvertUtil.convertTask(task);
+                List<String> candidates = activitiService.queryCandidateByTask(taskEntity.getTaskId());
+                taskEntity.setCandidates(TaskUtil.convertCandidates(candidates));
                 process.setTask(taskEntity);
                 data.add(process);
             }
