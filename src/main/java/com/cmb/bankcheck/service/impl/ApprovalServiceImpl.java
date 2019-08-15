@@ -4,18 +4,17 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import com.cmb.bankcheck.comon.TaskFactory;
 import com.cmb.bankcheck.config.AppConfig;
 import com.cmb.bankcheck.config.NewConfig;
+import com.cmb.bankcheck.entity.EmployeeEntity;
 import com.cmb.bankcheck.entity.ProcessEntity;
 import com.cmb.bankcheck.entity.TaskEntity;
+import com.cmb.bankcheck.mapper.EmployeeMapper;
 import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.message.ResponseMessage;
 import com.cmb.bankcheck.service.ActivitiService;
 import com.cmb.bankcheck.service.ApprovalService;
 import com.cmb.bankcheck.task.ApprovalServiceAbstracter;
-import com.cmb.bankcheck.util.BeanUtil;
-import com.cmb.bankcheck.util.EntityConvertUtil;
-import com.cmb.bankcheck.util.MessageUtil;
-import com.cmb.bankcheck.util.TaskUtil;
+import com.cmb.bankcheck.util.*;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -65,6 +64,9 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Autowired
     ActivitiService activitiService;
 
+    @Autowired
+    EmployeeMapper employeeMapper;
+
     //默认初始化任务为普通任务
     @Resource(name="personTask")
     private ApprovalServiceAbstracter taskInstance;
@@ -85,6 +87,12 @@ public class ApprovalServiceImpl implements ApprovalService {
             TaskEntity taskEntity = EntityConvertUtil.convertTask(task);
             List<String> candidates = activitiService.queryCandidateByTask(taskEntity.getTaskId());
             taskEntity.setCandidates(TaskUtil.convertCandidates(candidates));
+            // 根据候选人查找当前任务所属的机构和网点/部门
+            if (candidates.size() > 0){
+                EmployeeEntity info = employeeMapper.queryEmployeeInfo(candidates.get(0));
+                taskEntity.setCurrentBranch(BranchUtil.getBranchName(info.getBranch()));
+                taskEntity.setCurrentSubbranch(info.getSubbranch());
+            }
             data.add(taskEntity);
         }
         return new MessageUtil<TaskEntity>().setMsg(data, config.getSuccessCode(),config.getSuccessMsg());

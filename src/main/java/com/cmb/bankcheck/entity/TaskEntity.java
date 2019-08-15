@@ -15,6 +15,11 @@ public class TaskEntity {
 
     private Date updateTime;
 
+    // 当前任务所属的机构（一级分行和二级分行）
+    private String currentBranch;
+
+    // 当前任务所属的网点/部门
+    private String currentSubbranch;
     // 所属的流程实例的id
     private String processInstanceId;
 
@@ -26,6 +31,22 @@ public class TaskEntity {
 
     // 候选人
     private String candidates;
+
+    public String getCurrentBranch() {
+        return currentBranch;
+    }
+
+    public void setCurrentBranch(String currentBranch) {
+        this.currentBranch = currentBranch;
+    }
+
+    public String getCurrentSubbranch() {
+        return currentSubbranch;
+    }
+
+    public void setCurrentSubbranch(String currentSubbranch) {
+        this.currentSubbranch = currentSubbranch;
+    }
 
     public String getTimeStr() {
         return timeStr;

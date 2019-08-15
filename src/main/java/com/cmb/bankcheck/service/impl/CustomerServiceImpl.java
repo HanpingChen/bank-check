@@ -4,10 +4,12 @@ import com.cmb.bankcheck.comon.StarterFactory;
 import com.cmb.bankcheck.config.AppConfig;
 import com.cmb.bankcheck.entity.*;
 import com.cmb.bankcheck.mapper.CustomerMapper;
+import com.cmb.bankcheck.mapper.EmployeeMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.service.ActivitiService;
 import com.cmb.bankcheck.service.CustomerService;
 import com.cmb.bankcheck.starter.AbstractStarter;
+import com.cmb.bankcheck.util.BranchUtil;
 import com.cmb.bankcheck.util.EntityConvertUtil;
 import com.cmb.bankcheck.util.MessageUtil;
 import com.cmb.bankcheck.util.TaskUtil;
@@ -34,6 +36,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     CustomerMapper customerMapper;
+
+    @Autowired
+    EmployeeMapper employeeMapper;
 
 
     @Resource(name = "discount")
@@ -87,6 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
         // 首先查询process表中的process id
         List<ProcessEntity> processEntities = customerMapper.queryCustomerProcesses(userId);
         List<ProcessEntity> data = new ArrayList<>();
+        System.out.println("this is query process status "+userId);
         try {
             for (ProcessEntity process:processEntities){
                 String processId = process.getProcessId();
@@ -94,7 +100,14 @@ public class CustomerServiceImpl implements CustomerService {
                 Task task = activitiService.queryTaskByProcessId(processId);
                 TaskEntity taskEntity = EntityConvertUtil.convertTask(task);
                 List<String> candidates = activitiService.queryCandidateByTask(taskEntity.getTaskId());
+                // 将候选人列表转化为候选人字符串(以逗号分隔)
                 taskEntity.setCandidates(TaskUtil.convertCandidates(candidates));
+                // 根据候选人查找当前任务所属的机构和网点/部门
+                if (candidates.size() != 0){
+                    EmployeeEntity info = employeeMapper.queryEmployeeInfo(candidates.get(0));
+                    taskEntity.setCurrentBranch(BranchUtil.getBranchName(info.getBranch()));
+                    taskEntity.setCurrentSubbranch(info.getSubbranch());
+                }
                 process.setTask(taskEntity);
                 data.add(process);
             }

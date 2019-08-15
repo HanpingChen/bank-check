@@ -102,7 +102,7 @@ public class ActivitiServiceImpl implements ActivitiService {
         if (taskBranchType.equals("二级分行") || apart.equals("管理委员会")){
             subbranch = apart;
         }
-        if (taskBranchType.equals("一级分行")){
+        if (taskBranchType.equals("一级分行") || apart.equals("管理委员会")){
             subbranch = apart;
             if (!branch.equals("0551")){
                 branch = "0551";
