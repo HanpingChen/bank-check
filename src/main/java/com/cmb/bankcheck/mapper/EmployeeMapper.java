@@ -25,6 +25,14 @@ public interface EmployeeMapper {
     @Select("select id from employee where apart = #{apart}")
     public List<String> queryEmployeeByApart(@Param("apart") String apart);
 
+    /**
+     * 通过部门和职位查找
+     * @param apart
+     * @param position
+     * @return
+     */
+    @Select("select id from employee where apart = #{apart} and position = #{position}")
+    List<String> queryEmployeeByApartAndPosition(@Param("apart") String apart,@Param("position") String position);
 
     @Select("select password from employee where id = #{id}")
     public String queryPassword(@Param("id") String id);

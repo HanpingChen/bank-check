@@ -72,7 +72,7 @@ public class DiscountStarter extends AbstractStarter {
             System.out.println(map);
             // 还需要将委员会名单设置
             // 从数据库中查询管理委员会
-            List<String> assignees = employeeMapper.queryEmployeeByApart("管理委员会");
+            List<String> assignees = employeeMapper.queryEmployeeByApartAndPosition("管理委员会","审批人");
             System.out.println(assignees);
             map.put("assignees",assignees);
             map.put("count",0);
@@ -86,6 +86,8 @@ public class DiscountStarter extends AbstractStarter {
             map.put("branch", branch);
             this.runtimeService.setVariables(processId, map);
             entity.setApplyId(processId);
+            entity.setBranch(branch);
+            entity.setSubbranch(subbranch);
             // 写入数据库
             applyMapper.insertApply(entity);
         } catch (Exception e) {
@@ -102,6 +104,7 @@ public class DiscountStarter extends AbstractStarter {
         for (String candidate:candidates){
             taskService.addCandidateUser(taskId, candidate);
         }
+        System.out.println("设置初始任务的候选人"+candidates);
         return candidates;
     }
 

@@ -26,6 +26,17 @@ public class NewConfig {
     //会签最低同意人数
     private  int count;
 
+    // 会签通过所需要的通过人数所占总人数的比例
+    private float percent;
+
+    public float getPercent() {
+        return percent;
+    }
+
+    public void setPercent(float percent) {
+        this.percent = percent;
+    }
+
     public int getCount() {
         return count;
     }

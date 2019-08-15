@@ -18,6 +18,10 @@ public class TaskUtil {
      */
     public static String getApartNameFromTask(String taskName){
         String apart = taskName;
+        if (taskName.equals("二级分行分管行长")){
+            return "二级分行";
+        }
+        // 去头
         if (taskName.startsWith("一级分行") || taskName.startsWith("二级分行")){
             // 先将表示分行机构的去除
             apart = taskName.substring(4, taskName.length());
@@ -28,6 +32,13 @@ public class TaskUtil {
 
         if (taskName.contains("专员") || taskName.contains("网点")){
             return null;
+        }
+        // 去尾
+        if (taskName.endsWith("分管行长")){
+            apart = apart.substring(0, apart.length()-4);
+        }
+        if (apart.endsWith("主任")){
+            apart = apart.substring(0, apart.length()-2);
         }
         return apart;
     }
@@ -40,11 +51,14 @@ public class TaskUtil {
     }
 
     public static String getPosition(String taskName){
+        if (taskName.endsWith("分管行长")){
+            return "分管行长";
+        }
         if (taskName.endsWith("行长")){
             return "行长";
         }
         if (taskName.endsWith("主任")){
-            return "主管";
+            return "主任";
         }
         if (taskName.contains("专员")){
             return "专员";

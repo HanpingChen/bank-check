@@ -40,11 +40,22 @@ public class ApplyEntity {
     // 客户规模，效益有无不良贷款
     private String situation;
 
-    // 办理机构
+    // 办理机构(分行)
     private String branch;
+
+    // 办理网点（支行）
+    private String subbranch;
 
     // 减免类型
     private String discountType;
+
+    public String getSubbranch() {
+        return subbranch;
+    }
+
+    public void setSubbranch(String subbranch) {
+        this.subbranch = subbranch;
+    }
 
     public double getAmt() {
         return amt;

@@ -1,6 +1,7 @@
 package com.cmb.bankcheck.task;
 
 import com.cmb.bankcheck.config.NewConfig;
+import com.cmb.bankcheck.config.WorkConfig;
 import com.cmb.bankcheck.mapper.ProcessMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.service.ActivitiService;
@@ -65,7 +66,8 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
             String nextTaskId = nextTask.getId();
             int count=(int) taskService.getVariables(nextTaskId).get("count");
             //从配置文件中加载会签通过的最低人数
-            if(count<newConfig.getCount()){
+            System.out.println((int) (WorkConfig.percent *nrOfInstances));
+            if(count < (int) (WorkConfig.percent *nrOfInstances)){
                 //委员会通票数不够，删除任务。
                 deleteTask(processId,remark);
                 String message=newConfig.getRefuseMsg()+printMes;
@@ -80,6 +82,7 @@ public class MultiTaskApprovalService extends ApprovalServiceAbstracter {
             //设置候选人
             //获取候选人名单
             List<String> candidates = activitiService.queryCandidatesByTaskName(nextTask);
+            System.out.println("会签结束后的任务候选人"+candidates);
             //设置候选人
             for (String candidate :candidates) {
                 taskService.addCandidateUser(nextTask.getId(),candidate);

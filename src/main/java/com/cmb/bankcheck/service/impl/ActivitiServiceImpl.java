@@ -2,6 +2,7 @@ package com.cmb.bankcheck.service.impl;
 
 import com.cmb.bankcheck.mapper.EmployeeMapper;
 import com.cmb.bankcheck.service.ActivitiService;
+import com.cmb.bankcheck.util.BranchUtil;
 import com.cmb.bankcheck.util.TaskUtil;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
@@ -91,18 +92,20 @@ public class ActivitiServiceImpl implements ActivitiService {
         String apart = TaskUtil.getApartNameFromTask(taskName);
         // 获取当前任务审批所在的机构类型，包括
         String taskBranchType = TaskUtil.getBranchTypeFromTaskName(taskName);
-
         if (apart == null){
             // 从任务中无法截取出部门名称，意味着当前任务还处于网点审批阶段，所以从流程变量中获取网点名称作为部门
             apart = subbranch;
         }
-        if (taskBranchType.equals("二级分行")){
+        if (apart.equals("二级分行")){
+            apart = BranchUtil.getBranchName(branch);
+        }
+        if (taskBranchType.equals("二级分行") || apart.equals("管理委员会")){
             subbranch = apart;
         }
         if (taskBranchType.equals("一级分行")){
+            subbranch = apart;
             if (!branch.equals("0551")){
                 branch = "0551";
-                subbranch = apart;
             }
         }
         // 根据任务名称获取position

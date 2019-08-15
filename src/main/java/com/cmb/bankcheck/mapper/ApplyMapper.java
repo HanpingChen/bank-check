@@ -19,7 +19,7 @@ public interface ApplyMapper {
     @Select("select * from apply where apply_id = #{processId}")
     public ApplyEntity queryApplyByProcessId(@Param("processId") String processId);
 
-    @Insert("insert into apply(apply_id, user_id, username,msg, process_key,starter,xmtype,amt,record,cor,analyse,situation, branch) " +
-            "values(#{applyId}, #{userId}, #{username}, #{msg}, #{processKey},#{starter},#{xmtype},#{amt},#{record},#{cor},#{analyse},#{situation},#{branch})")
+    @Insert("insert into apply(apply_id, user_id, username,msg, process_key,starter,xmtype,amt,record,cor,analyse,situation, branch,subbranch, discount_type) " +
+            "values(#{applyId}, #{userId}, #{username}, #{msg}, #{processKey},#{starter},#{xmtype},#{amt},#{record},#{cor},#{analyse},#{situation},#{branch},#{subbranch},#{discountType})")
     public int insertApply(ApplyEntity entity);
 }

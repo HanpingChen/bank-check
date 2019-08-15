@@ -51,10 +51,10 @@ public class PersonApprovalService extends ApprovalServiceAbstracter {
         Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         String processId=task.getProcessInstanceId();
         //审核不通过，删除任务，插入任务流程数据
-        if (judgement.equals("NO")){
+        if (judgement.toUpperCase().equals("NO")){
             //删除任务
             //this.deleteTask(processId,remark);
-            this.taskService.deleteTask(processId,remark);
+            this.runtimeService.deleteProcessInstance(processId,remark);
             this.processMapper.updateProcessByProcessId(processId,remark,null,newConfig.getRefuseCode());
             String message="任务审核不通过";
             int statusCode=newConfig.getRefuseCode();

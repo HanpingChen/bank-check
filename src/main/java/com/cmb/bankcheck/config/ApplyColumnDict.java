@@ -51,7 +51,18 @@ public class ApplyColumnDict {
     // 办理机构
     private String branch;
 
+    // 经办网点
+    private String subbranch;
+
     private String discountType;
+
+    public String getSubbranch() {
+        return subbranch;
+    }
+
+    public void setSubbranch(String subbranch) {
+        this.subbranch = subbranch;
+    }
 
     public String getDiscountType() {
         return discountType;
