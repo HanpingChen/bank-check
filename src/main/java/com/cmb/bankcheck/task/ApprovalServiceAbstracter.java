@@ -36,7 +36,7 @@ public abstract class ApprovalServiceAbstracter {
     //审核不通过，删除任务，更新process表
     public void deleteTask(String processId,String remark){
         runtimeService.deleteProcessInstance(processId,remark);
-        processMapper.updateProcessByProcessId(processId,remark,null,newConfig.getRefuseCode());
+        processMapper.updateProcessByProcessId(processId,remark,new Date(),newConfig.getRefuseCode());
     }
 
     //任务执行，返回状态信息
