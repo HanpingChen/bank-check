@@ -36,7 +36,6 @@ public class ApplyController {
 
     @RequestMapping(value = "/apply/query_apply",method = RequestMethod.POST)
     public Message queryApply(@Param("applyId") String applyId){
-        System.out.println("apply "+ applyId);
         return applyService.queryApply(applyId);
     }
 
