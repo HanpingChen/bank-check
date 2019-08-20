@@ -125,6 +125,44 @@ public class CustomerServiceImpl implements CustomerService {
             msg.setMsg(e.getMessage());
             return msg;
         }
+    }
 
+    @Override
+    public Message queryProcessStatusByApplyId(String applyId) {
+        List<ProcessEntity> processEntities =customerMapper.queryCustomerProcessesByApplyId(applyId);
+        List<ProcessEntity> data = new ArrayList<>();
+        System.out.println("this is query process status by applyId,"+applyId);
+        try {
+            for (ProcessEntity process:processEntities){
+                String processId = process.getProcessId();
+                System.out.println(processId);
+                if (process.getStatus() == 3){
+                    // 任务已完成
+                    data.add(process);
+                    continue;
+                }
+                // 查询任务
+                Task task = activitiService.queryTaskByProcessId(processId);
+                System.out.println("taskname"+task.getName());
+                TaskEntity taskEntity = EntityConvertUtil.convertTask(task);
+                List<String> candidates = activitiService.queryCandidateByTask(taskEntity.getTaskId());
+                // 将候选人列表转化为候选人字符串(以逗号分隔)
+                taskEntity.setCandidates(TaskUtil.convertCandidates(candidates));
+                // 根据候选人查找当前任务所属的机构和网点/部门
+                if (candidates.size() != 0){
+                    EmployeeEntity info = employeeMapper.queryEmployeeInfo(candidates.get(0));
+                    taskEntity.setCurrentBranch(BranchUtil.getBranchName(info.getBranch()));
+                    taskEntity.setCurrentSubbranch(info.getSubbranch());
+                }
+                process.setTask(taskEntity);
+                data.add(process);
+            }
+            return new MessageUtil<ProcessEntity>().setMsg(data, config.getSuccessCode(),config.getSuccessMsg());
+        }catch (Exception e){
+            Message msg = new Message();
+            msg.setStatus(config.getErrorCode());
+            msg.setMsg(e.getMessage());
+            return msg;
+        }
     }
 }

@@ -19,4 +19,6 @@ public interface CustomerService {
     Message queryProcess();
 
     Message queryProcessStatus(String userId);
+
+    Message queryProcessStatusByApplyId(String applyId);
 }

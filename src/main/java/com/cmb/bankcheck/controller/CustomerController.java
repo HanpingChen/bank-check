@@ -34,4 +34,9 @@ public class CustomerController {
     public Message queryProcessStatus(@Param("customerId") String customerId){
         return service.queryProcessStatus(customerId);
     }
+
+    @RequestMapping(value="/customer/process_stutus_applyId",method = RequestMethod.POST)
+    public Message queryProcessStatusByApplyId(String applyId){
+        return service.queryProcessStatusByApplyId(applyId);
+    }
 }

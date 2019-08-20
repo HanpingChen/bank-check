@@ -20,4 +20,8 @@ public interface CustomerMapper {
 
     @Select("select * from process where user_id = #{id}")
     List<ProcessEntity> queryCustomerProcesses(@Param("id") String id);
+
+    @Select("select * from process where apply_id=#{applyId}")
+    List<ProcessEntity> queryCustomerProcessesByApplyId(@Param("applyId") String applyId);
+
 }
