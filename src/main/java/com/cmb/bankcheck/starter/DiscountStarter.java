@@ -84,10 +84,11 @@ public class DiscountStarter extends AbstractStarter {
             map.put("subbranch",subbranch);
             // 设置当前机构代码
             map.put("branch", branch);
-            this.runtimeService.setVariables(processId, map);
-            entity.setApplyId(processId);
+            entity.setApplyId(entity.createApplyId(entity.getUserId(), processId));
+            map.put("applyId",entity.getApplyId());
             entity.setBranch(branch);
             entity.setSubbranch(subbranch);
+            this.runtimeService.setVariables(processId, map);
             // 写入数据库
             applyMapper.insertApply(entity);
         } catch (Exception e) {

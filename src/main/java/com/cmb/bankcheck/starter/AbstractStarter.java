@@ -49,7 +49,14 @@ public abstract class AbstractStarter {
             return null;
         }
         // 将流程id和userid写入process表中
-        processMapper.insertProcess((String) map.get("userId"), processInstance.getId(),1,"", processInstance.getStartTime(), null,null,processInstance.getParentId());
+        ProcessEntity entity = new ProcessEntity();
+        entity.setUserId((String) map.get("userId"));
+        entity.setApplyId((String) map.get("applyId"));
+        entity.setCreateTime(processInstance.getStartTime());
+        entity.setStatus(1);
+        entity.setProcessId(processInstance.getId());
+        entity.setParentId(processInstance.getParentId());
+        processMapper.insertProcess(entity);
         // 获取当前任务并返回
         Task task = service.queryTaskByProcessId(processInstance.getId());
         // 设置候选人 也可以不设置直接返回null

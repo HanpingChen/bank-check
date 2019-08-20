@@ -20,6 +20,16 @@ public class ProcessEntity {
 
     private Date createTime;
 
+    private String applyId;
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
+    }
+
     public String getSystemId() {
         return systemId;
     }

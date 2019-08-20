@@ -6,6 +6,7 @@ import com.cmb.bankcheck.mapper.ApplyMapper;
 import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.service.ApplyService;
 import com.cmb.bankcheck.util.MessageUtil;
+import jdk.jfr.DataAmount;
 import org.activiti.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,8 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    public Message queryApply(String applyId) {
-        ApplyEntity entity = mapper.queryApplyByProcessId(applyId);
+    public Message queryApply(String processId) {
+        ApplyEntity entity = mapper.queryApplyByProcessId(processId);
         List<ApplyEntity> data = new ArrayList<>();
         data.add(entity);
         return new MessageUtil<ApplyEntity>().setMsg(data,config.getSuccessCode(),config.getSuccessMsg());

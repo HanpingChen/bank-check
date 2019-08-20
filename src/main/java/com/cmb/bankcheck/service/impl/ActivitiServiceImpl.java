@@ -55,7 +55,11 @@ public class ActivitiServiceImpl implements ActivitiService {
 
     @Override
     public Task queryTaskByProcessId(String processId) {
-        return taskService.createTaskQuery().processInstanceId(processId).singleResult();
+        List<Task> tasks = taskService.createTaskQuery().processInstanceId(processId).list();
+        if (tasks.size() == 0){
+            return null;
+        }
+        return tasks.get(0);
     }
 
     @Override

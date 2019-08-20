@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Select;
 public interface ApplyMapper {
 
 
-    @Select("select * from apply where apply_id = #{processId}")
+    @Select("select apply.* from apply, process where apply.apply_id = process.apply_id and process.process_id = #{processId}")
     public ApplyEntity queryApplyByProcessId(@Param("processId") String processId);
 
     @Insert("insert into apply(apply_id, user_id, username,msg, process_key,starter,xmtype,amt,record,cor,analyse,situation, branch,subbranch, discount_type) " +

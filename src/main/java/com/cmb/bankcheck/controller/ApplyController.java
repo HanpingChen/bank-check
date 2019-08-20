@@ -35,8 +35,8 @@ public class ApplyController {
     private AppConfig config;
 
     @RequestMapping(value = "/apply/query_apply",method = RequestMethod.POST)
-    public Message queryApply(@Param("applyId") String applyId){
-        return applyService.queryApply(applyId);
+    public Message queryApply(@Param("processId") String processId){
+        return applyService.queryApply(processId);
     }
 
     @RequestMapping(value = "/apply/query_dict",method = RequestMethod.GET)

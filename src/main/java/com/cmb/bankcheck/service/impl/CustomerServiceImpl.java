@@ -96,8 +96,15 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             for (ProcessEntity process:processEntities){
                 String processId = process.getProcessId();
+                System.out.println(processId);
+                if (process.getStatus() == 3){
+                    // 任务已完成
+                    data.add(process);
+                    continue;
+                }
                 // 查询任务
                 Task task = activitiService.queryTaskByProcessId(processId);
+                System.out.println("taskname"+task.getName());
                 TaskEntity taskEntity = EntityConvertUtil.convertTask(task);
                 List<String> candidates = activitiService.queryCandidateByTask(taskEntity.getTaskId());
                 // 将候选人列表转化为候选人字符串(以逗号分隔)

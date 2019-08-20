@@ -26,16 +26,12 @@ public interface ProcessMapper {
 
     /**
      * 插入一条用户、流程信息
-     * @param userId
-     * @param processId
      * @return
      */
     @Insert("insert into process" +
-            "(user_id, process_id,remark, create_time, status, parent_id, system_id, work_id) values " +
-            "(#{userId}, #{processId},#{remark},#{createTime},#{status},#{parentId},#{systemId},#{workId})")
-    int insertProcess(@Param("userId") String userId, @Param("processId") String processId, @Param("status") int status, @Param("remark") String remark,
-                      @Param("createTime") Date createTime, @Param("systemId") String systemId,@Param("workId") String workId, @Param("parentId") String parentId
-                      );
+            "(user_id, process_id,remark, create_time, status, parent_id, system_id, work_id,apply_id) values " +
+            "(#{userId}, #{processId},#{remark},#{createTime},#{status},#{parentId},#{systemId},#{workId},#{applyId})")
+    int insertProcess(ProcessEntity entity);
 
     /**
      * 根据instanceId，查询得到userId等相关信息

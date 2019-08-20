@@ -1,5 +1,8 @@
 package com.cmb.bankcheck.entity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * created by chenhanping
  * Designer:chenhanping
@@ -167,5 +170,11 @@ public class ApplyEntity {
 
     public void setProcessKey(String processKey) {
         this.processKey = processKey;
+    }
+
+    public String createApplyId(String userId, String processId){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+        String newDate=sdf.format(new Date());
+        return userId + processId + newDate;
     }
 }
