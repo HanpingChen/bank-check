@@ -20,7 +20,27 @@ public class ProcessEntity {
 
     private Date createTime;
 
+    private String completeTimeStr;
+
     private String applyId;
+
+    private String createTimeStr;
+
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
+    }
+
+    public String getCompleteTimeStr() {
+        return completeTimeStr;
+    }
+
+    public void setCompleteTimeStr(String completeTimeStr) {
+        this.completeTimeStr = completeTimeStr;
+    }
 
     public String getApplyId() {
         return applyId;

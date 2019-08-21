@@ -24,8 +24,9 @@ public class EntityConvertUtil {
         entity.setProcessId(instance.getId());
         entity.setCreateTime(instance.getStartTime());
         entity.setUserId((String) map.get("userId"));
-        entity.setName(instance.getName());
+        entity.setName(instance.getProcessDefinitionName());
         entity.setStatus((Integer) map.getOrDefault("status",0));
+        entity.setApplyId((String) map.get("applyId"));
         TaskEntity taskEntity = convertTask(task);
         if (candidates!=null) {
             StringBuilder sb = new StringBuilder();
@@ -51,7 +52,7 @@ public class EntityConvertUtil {
         entity.setProcessKey(task.getProcessDefinitionId().split(":")[0]);
         entity.setTaskName(task.getName()+"审批");
         // 设置时间字符串
-        entity.setTimeStr(task.getCreateTime().toLocaleString());
+        entity.setTimeStr(TimeUtil.convertDateToString(task.getCreateTime()));
         entity.setProcessInstanceId(task.getProcessInstanceId());
         return entity;
 

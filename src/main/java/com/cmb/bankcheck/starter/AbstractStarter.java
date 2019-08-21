@@ -56,6 +56,7 @@ public abstract class AbstractStarter {
         entity.setStatus(1);
         entity.setProcessId(processInstance.getId());
         entity.setParentId(processInstance.getParentId());
+        entity.setName(processInstance.getProcessDefinitionName());
         processMapper.insertProcess(entity);
         // 获取当前任务并返回
         Task task = service.queryTaskByProcessId(processInstance.getId());

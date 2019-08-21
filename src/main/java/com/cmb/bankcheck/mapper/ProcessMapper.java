@@ -29,8 +29,8 @@ public interface ProcessMapper {
      * @return
      */
     @Insert("insert into process" +
-            "(user_id, process_id,remark, create_time, status, parent_id, system_id, work_id,apply_id) values " +
-            "(#{userId}, #{processId},#{remark},#{createTime},#{status},#{parentId},#{systemId},#{workId},#{applyId})")
+            "(user_id, process_id,remark, create_time, status, parent_id, system_id, work_id,apply_id,name) values " +
+            "(#{userId}, #{processId},#{remark},#{createTime},#{status},#{parentId},#{systemId},#{workId},#{applyId},#{name})")
     int insertProcess(ProcessEntity entity);
 
     /**

@@ -9,10 +9,7 @@ import com.cmb.bankcheck.message.Message;
 import com.cmb.bankcheck.service.ActivitiService;
 import com.cmb.bankcheck.service.CustomerService;
 import com.cmb.bankcheck.starter.AbstractStarter;
-import com.cmb.bankcheck.util.BranchUtil;
-import com.cmb.bankcheck.util.EntityConvertUtil;
-import com.cmb.bankcheck.util.MessageUtil;
-import com.cmb.bankcheck.util.TaskUtil;
+import com.cmb.bankcheck.util.*;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,51 +90,31 @@ public class CustomerServiceImpl implements CustomerService {
         List<ProcessEntity> processEntities = customerMapper.queryCustomerProcesses(userId);
         List<ProcessEntity> data = new ArrayList<>();
         System.out.println("this is query process status "+userId);
-        try {
-            for (ProcessEntity process:processEntities){
-                String processId = process.getProcessId();
-                System.out.println(processId);
-                if (process.getStatus() == 3){
-                    // 任务已完成
-                    data.add(process);
-                    continue;
-                }
-                // 查询任务
-                Task task = activitiService.queryTaskByProcessId(processId);
-                System.out.println("taskname"+task.getName());
-                TaskEntity taskEntity = EntityConvertUtil.convertTask(task);
-                List<String> candidates = activitiService.queryCandidateByTask(taskEntity.getTaskId());
-                // 将候选人列表转化为候选人字符串(以逗号分隔)
-                taskEntity.setCandidates(TaskUtil.convertCandidates(candidates));
-                // 根据候选人查找当前任务所属的机构和网点/部门
-                if (candidates.size() != 0){
-                    EmployeeEntity info = employeeMapper.queryEmployeeInfo(candidates.get(0));
-                    taskEntity.setCurrentBranch(BranchUtil.getBranchName(info.getBranch()));
-                    taskEntity.setCurrentSubbranch(info.getSubbranch());
-                }
-                process.setTask(taskEntity);
-                data.add(process);
-            }
-            return new MessageUtil<ProcessEntity>().setMsg(data, config.getSuccessCode(),config.getSuccessMsg());
-        }catch (Exception e){
-            Message msg = new Message();
-            msg.setStatus(config.getErrorCode());
-            msg.setMsg(e.getMessage());
-            return msg;
-        }
+        return queryProcessInfo(processEntities);
     }
 
     @Override
     public Message queryProcessStatusByApplyId(String applyId) {
         List<ProcessEntity> processEntities =customerMapper.queryCustomerProcessesByApplyId(applyId);
-        List<ProcessEntity> data = new ArrayList<>();
         System.out.println("this is query process status by applyId,"+applyId);
+        return queryProcessInfo(processEntities);
+    }
+
+    /**
+     * 查询流程的详细信息
+     * @param processEntities
+     * @return
+     */
+    public Message queryProcessInfo(List<ProcessEntity> processEntities){
         try {
+            List<ProcessEntity> data = new ArrayList<>();
             for (ProcessEntity process:processEntities){
                 String processId = process.getProcessId();
+                process.setCreateTimeStr(TimeUtil.convertDateToString(process.getCreateTime()));
                 System.out.println(processId);
-                if (process.getStatus() == 3){
+                if (process.getStatus() == 3 || process.getStatus() == -1){
                     // 任务已完成
+                    process.setCompleteTimeStr(TimeUtil.convertDateToString(process.getCompleteTime()));
                     data.add(process);
                     continue;
                 }
